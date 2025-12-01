@@ -1,0 +1,77 @@
+@import '../themes/main.css';
+
+* {
+    /* `otf-font-awesome` is required to be installed for icons */
+    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+}
+
+window#waybar {
+    background-color: transparent;
+    color: @foreground;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+.modules-left {
+    background: @background-alt;
+    padding: 0 15px 0 5px;
+    border-bottom: 2px solid @border;
+    border-right: 2px solid @border;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+#custom-power {
+    padding: 0 5px 0 10px;
+    font-size: 2em;
+}
+#custom-power:hover {
+    color: @hover;
+}
+.modules-center {
+    background: @background-alt;
+    border-bottom: 2px solid @border;
+    border-left: 2px solid @border;
+    border-right: 2px solid @border;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+#workspaces {
+    padding: 0 15px;
+}
+#workspaces button {
+    padding: 0 2px;
+    background-color: transparent;
+    color: currentColor;
+}
+
+#workspaces button:hover {
+    color: @hover;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+}
+#workspaces button.active {
+}
+.modules-right {
+    background: @background-alt;
+    padding: 0 15px 0 15px;
+    border-bottom: 2px solid @border;
+    border-left: 2px solid @border;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#backlight,
+#network,
+#pulseaudio {
+    background-color: transparent;
+    color: currentColor;
+    padding: 0 5px;
+}

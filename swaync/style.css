@@ -1,0 +1,14 @@
+@import '../themes/main.css';
+@import 'style/notifications.css';
+@import 'style/control-center.css';
+
+:root {
+  --notification-icon-size: 50px;
+}
+
+* {
+  color: @foreground;
+  font-size: 15px;
+  font-family: "Ndot55";
+  transition: 200ms;
+}

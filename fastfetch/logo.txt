@@ -1,0 +1,24 @@
+
+                     $3ll$4kk
+                  $3lllll$4kkkkk
+               $3llllllll$4kkkkkkkk
+            $3lllllllllll$4kkkkkkkkkkk
+         $3llllllllllllll$4kkkkkkkkkkkkkk
+      $3lllllllllllllllll$4kkkkkkkkkkkkkkkkk
+   $3llllllllllllllllllll$4kkkkkkkkkkkkkkkkkkkk
+   $3lllllllllllllllllll$1l$2k$6k$4kkkkkkkkkkkkkkkkkk
+   $3lllllllllllllllllll$1l$2k$6kkk$4kkkkkkkkkkkkkkkk
+   $3llllllllllllllllll$1ll$2kk$6kkk$4kkkkkkkkkkkkkkk
+   $3lllllllllllllllll$1lll$2kkk$6kkkk$4kkkkkkkkkkkkk
+   $3llllllllllllllll$1lll$5k$6k$2kkk$6kkkkk$4kkkkkkkkkkk
+   $3llllllllllllllll$1llll$2kkkk$6kkkkkkk$4kkkkkkkkk
+   $3lllllllllllllll$1lllll$2kkkkk$6kkkkkkk$4kkkkkkkk
+   $3llllllllllllll$1llll$5kk$6kk$2kkkk$6kkkkkkkk$4kkkkkk
+   $3lllllllllllll$1llll$5kkk$6kkk$2kkkk$6kkkkkkkk$4kkkkk
+   $3lllllllllllll$5kkkkkkk$6kkkkkkkkkkkkkkkkk$4kkk
+      $3llllllllllll$5kkkkk$6kkkkkkkkkkkkkkkkk
+         $3llllllllll$5kkkk$6kkkkkkkkkkkkkk
+            $3lllllllll$5kk$6kkkkkkkkkkk
+               $3lllllll$5k$6kkkkkkkk
+                  $3lllll$4k$6kkkk
+                     $3ll$4kk

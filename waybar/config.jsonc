@@ -1,0 +1,138 @@
+// -*- mode: jsonc -*-
+{
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    // "height": 15, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": [
+	"custom/power",
+	"custom/player",
+        "clock"
+    ],
+    "modules-center": [
+        "hyprland/workspaces"
+    ],
+    "modules-right": [
+        "pulseaudio",
+        "network",
+        "cpu",
+        "memory",
+	"disk",
+        "backlight",
+        "battery",
+        "battery#bat2"
+    ],
+    // Modules configuration
+     "hyprland/workspaces": {
+         "all-outputs": true,
+         "format": "{icon}",
+         "format-icons": {
+             "active": "",
+             "default": ""
+         },
+         "persistent-workspaces": {
+             "*": 10
+         }
+     },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "clock": {
+	"interval": 1,
+        // "timezone": "America/New_York",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}",
+	"format": "{:%H:%M:%S}"
+    },
+    "cpu": {
+    	"format": "CPU {usage}% ", 
+    	"interval": 5,
+        "states": {
+                "warning": 70,
+                "critical": 90
+        }
+    },
+    "memory": {
+    	"format": "{percentage}% ",
+	"format-alt": "RAM {used:0.1f}/{total:0.1f}G",
+    	"interval": 5,
+    	"states": {
+        	"warning": 70,
+        	"critical": 90
+    	}
+    },
+    "disk": {
+        "format": "{used} "
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": "{volume}%  {icon} {format_source}",
+        "format-muted": "{volume}%  {format_source}",
+        "format-source": "",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+	"tooltip-format": "{format_source}: {source_volume}%\n{icon}: {volume}%",
+        "on-click": "pavucontrol",
+	"on-click-middle": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+	"on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+    },
+    "custom/player": {
+    	"exec": "player=$(playerctl -l 2>/dev/null | head -n1); title=$(playerctl metadata --format '{{ title }}' 2>/dev/null || echo 'Sin reproducción'); artist=$(playerctl metadata --format '{{ artist }}' 2>/dev/null || echo ''); if [[ $player == *'spotify'* ]]; then icon=''; elif [[ $player == *'brave'* ]] || [[ $player == *'chromium'* ]]; then icon=''; else icon='🎵'; fi; max=30; [ ${#title} -gt $max ] && title=\"${title:0:$max}...\"; echo \"$icon  $artist: $title\"",
+       	"interval": 2,
+    	"return-type": "text",
+    	"on-click": "playerctl play-pause"
+    },
+    "custom/power": {
+        "format" : "⏻",
+	"tootltip": false,
+	"on-click": "~/.config/waybar/power_menu.sh"
+    }
+}

@@ -1,0 +1,169 @@
+.control-center {
+  background: transparent;
+  border-radius: 0;
+  margin: 2px;
+}
+
+.widgets > .widget,
+.widget-mpris > carouselindicatordots,
+.widget-mpris > box > button {
+  background: @background;
+  color: @foreground;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.control-center .widget-title > label {
+  color: @foreground;
+  font-size: 1.3em;
+}
+
+.control-center .widget-title button {
+  border-radius: 7px;
+  color: @foreground;
+  box-shadow: inset 0 0 0 1px @surface1;
+  padding: 8px;
+}
+
+.control-center .widget-title button:hover {
+  background-color: @surface1;
+}
+
+.control-center .widget-title button:active {
+  background-color: @surface2;
+}
+
+.control-center .notification-group {
+  margin-top: 10px;
+  background-color: transparent;
+  border: 2px solid @surface2;
+}
+.control-center .notification-group .notifications-placeholder {
+  color: @foreground;
+}
+.control-center .notification-background {
+  margin: 9px;
+}
+
+scrollbar slider {
+  margin: -3px;
+  opacity: 0.8;
+}
+
+scrollbar trough {
+  margin: 2px 0;
+}
+
+/* dnd */
+
+.widget-dnd {
+  margin-top: 5px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  color: @foregound;
+}
+
+.widget-dnd > switch {
+  font-size: initial;
+  border-radius: 8px;
+  background: @surface1;
+  box-shadow: none;
+}
+
+.widget-dnd > switch:checked {
+  background: @surface2;
+}
+
+.widget-dnd > switch slider {
+  background: @switch-slider;
+  border-radius: 8px;
+}
+
+/* mpris */
+.widget-mpris-player {
+  margin: 0;
+  border-radius: 11px;
+  color: #cdd6f4;
+  background: @surface0;
+}
+
+.mpris-overlay {
+  background-color: @surface0;
+  opacity: 0.9;
+}
+
+.widget-mpris-album-art {
+  -gtk-icon-size: 100px;
+  border-radius: 11px;
+  margin: 0 10px;
+}
+
+.widget-mpris-title {
+  font-size: 1.2rem;
+  color: @foreground;
+}
+
+.widget-mpris-subtitle {
+  font-size: 1rem;
+  color: @subtext1;
+}
+
+.widget-mpris button {
+  border-radius: 11px;
+  color: @foreground;
+  margin: 0 5px;
+  padding: 2px;
+}
+
+.widget-mpris button image {
+  -gtk-icon-size: 1.8rem;
+}
+
+.widget-mpris button:hover {
+  background-color: @surface0;
+}
+
+.widget-mpris button:active {
+  background-color: @surface1;
+}
+
+.widget-mpris button:disabled {
+  opacity: 0.5;
+}
+
+.widget-menubar > box > .menu-button-bar > button > label {
+  font-size: 3rem;
+  padding: 0.5rem 2rem;
+}
+
+.power-buttons button:hover,
+.powermode-buttons button:hover,
+.screenshot-buttons button:hover {
+  background: @surface0;
+}
+
+.control-center .widget-label > label {
+  color: @foreground;
+  font-size: 2rem;
+}
+
+.widget-buttons-grid {
+  padding-top: 1rem;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button label {
+  font-size: 2.5rem;
+}
+
+.widget-backlight trough highlight {
+  background: yellow;
+}
+
+.widget-backlight label {
+  font-size: 1.5rem;
+  color: yellow;
+}
+
+.widget-backlight .KB {
+  padding-bottom: 1rem;
+}

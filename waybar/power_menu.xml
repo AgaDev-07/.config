@@ -1,8 +1,0 @@
-<menu>
-    <item label="  Apagar" action="shutdown"/>
-    <item label="  Reiniciar" action="reboot"/>
-    <item label="  Suspender" action="suspend"/>
-    <separator/>
-    <item label="  Bloquear" action="hyprlock"/>
-    <item label="  Cerrar sesión" action="loginctl terminate-user $USER"/>
-</menu>

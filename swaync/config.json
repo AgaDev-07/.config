@@ -31,6 +31,7 @@
   "hide-on-clear": false,
   "hide-on-action": false,
   "script-fail-notify": true,
+  "relative-timestamps": true,
 
   "widgets": [
     "mpris",

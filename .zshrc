@@ -57,7 +57,7 @@ PROMPT='%F{cyan}󰣇 %f %F{magenta}%n%f $(dir_icon) %F{red}%~%f${vcs_info_msg_0_
 export GTK_THEME=Adwaita:dark
 export XCURSOR_THEME=RedCursor
 export XCURSOR_SIZE=24
-export QT_QPA_PLATFORMTHEME=qt5ct
+export QT_QPA_PLATFORMTHEME=qt6ct
 export QT_STYLE_OVERRIDE=Adwaita-Dark
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
@@ -94,7 +94,6 @@ alias uninstall='sudo pacman -Rns'
 alias installu='sudo pacman -U'
 alias update='sudo pacman -Syu'
 alias brave-browser='brave'
-alias code-oss='code'
 
 # Este alias borra pantalla y scrollback
 alias clear='clear && printf "\e[3J"'

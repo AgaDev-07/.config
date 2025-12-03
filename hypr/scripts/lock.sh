@@ -4,19 +4,18 @@
 # Hyprlock SDDM-style (Hypr-Ely-Neon)
 # =========================
 
-# Configuración
-THEME_CONF="/usr/share/sddm/themes/hypr-ely-neon/theme.conf"
-WALLPAPER="/usr/share/sddm/themes/hypr-ely-neon/Backgrounds/Hyprland.png"
-LOCK_DIR="$HOME/.config/hypr/hyprlock"
-OUTPUT="$LOCK_DIR/background.png"
-mkdir -p "$LOCK_DIR"
-
-# =========================
-# Leer configuración de theme.conf
-# =========================
 read_conf() {
   grep "^$1=" "$THEME_CONF" | cut -d'=' -f2 | tr -d '"'
 }
+
+
+# Configuración
+THEME_CONF="/usr/share/sddm/themes/hypr-ely-neon/theme.conf"
+WALLPAPER="/usr/share/sddm/themes/hypr-ely-neon/$(read_conf "Background")"
+IMAGES_DIR="$HOME/.config/hypr/images"
+OUTPUT="$IMAGES_DIR/background.png"
+mkdir -p "$IMAGES_DIR"
+
 
 SCREEN_W=$(read_conf "ScreenWidth")
 SCREEN_H=$(read_conf "ScreenHeight")
@@ -51,7 +50,7 @@ GRAVITY="$GRAVITY_H$GRAVITY_V"
 # =========================
 # 1️⃣ Escalar y recortar proporcionalmente
 # =========================
-BASE="$LOCK_DIR/background_base.png"
+BASE="$IMAGES_DIR/background_base.png"
 if [ "$SCALE_IMAGE" = "true" ]; then
     magick "$WALLPAPER" -resize ${SCREEN_W}x${SCREEN_H}^ -gravity $GRAVITY -extent ${SCREEN_W}x${SCREEN_H} "$BASE"
 else
@@ -61,7 +60,7 @@ fi
 # =========================
 # 2️⃣ Crear el blur detrás del formulario
 # =========================
-BLUR="$LOCK_DIR/background_blur.png"
+BLUR="$IMAGES_DIR/background_blur.png"
 
 if [ "$PARTIAL_BLUR" = "true" ]; then
   case "$FORM_POSITION" in

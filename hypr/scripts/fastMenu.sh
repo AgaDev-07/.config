@@ -1,13 +1,13 @@
 #!/bin/bash
 
-chosen=$(printf "Brave\nDiscord\nCode\nKitty\Thundar\nOnly Office\nMinecraft" | wofi --show dmenu --hide-search --prompt "" --location=center)
+chosen=$(printf "Brave\nDiscord\nCode\nKitty\nThunar\nOnly Office\nMinecraft" | wofi --show dmenu --hide-search --prompt "" --location=center)
 
 case "$chosen" in
     "Brave") brave ;;
     "Discord") discord ;;
     "Code") code ;;
     "Kitty") kitty ;;
-    "Thundar") thundar ;;
+    "Thunar") thunar ;;
     "Only Office") onlyoffice-desktopeditors ;;
     "Minecraft") flatpak run com.mcpelauncher.MCPELauncher;;
 esac

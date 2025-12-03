@@ -9,4 +9,6 @@
   <property name="last-separator-position" type="int" value="170"/>
   <property name="misc-image-preview-mode" type="string" value="THUNAR_IMAGE_PREVIEW_MODE_STANDALONE"/>
   <property name="misc-symbolic-icons-in-sidepane" type="bool" value="false"/>
+  <property name="last-window-width" type="int" value="720"/>
+  <property name="last-window-height" type="int" value="864"/>
 </channel>

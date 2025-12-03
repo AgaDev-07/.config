@@ -1,5 +1,11 @@
 max=15;
 
+is_valid=$(playerctl -l 2>/dev/null)
+
+if [[ -z "$is_valid" ]]; then
+  exit 1
+fi
+
 player=$(playerctl -l 2>/dev/null | head -n1)
 title=$(playerctl metadata --format '{{ title }}' 2>/dev/null || echo 'Sin reproducción')
 artist=$(playerctl metadata --format '{{ artist }}' 2>/dev/null || echo '')

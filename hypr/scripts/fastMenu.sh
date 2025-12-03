@@ -9,5 +9,5 @@ case "$chosen" in
     "Kitty") kitty ;;
     "Thunar") thunar ;;
     "Only Office") onlyoffice-desktopeditors ;;
-    "Minecraft") flatpak run com.mcpelauncher.MCPELauncher;;
+    "Minecraft") flatpak run io.mrarm.mcpelauncher;;
 esac

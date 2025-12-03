@@ -1,0 +1,12 @@
+[Default Applications]
+text/html=brave-browser.desktop
+x-scheme-handler/http=brave-browser.desktop
+x-scheme-handler/https=brave-browser.desktop
+x-scheme-handler/about=brave-browser.desktop
+x-scheme-handler/unknown=brave-browser.desktop
+application/vnd.rar=org.gnome.FileRoller.desktop
+application/vnd.flatpak=userapp-flatpak-H1IJH3.desktop
+
+[Added Associations]
+application/vnd.rar=org.gnome.FileRoller.desktop;userapp-unrar-3MB7G3.desktop;
+application/vnd.flatpak=userapp-flatpak install-T033G3.desktop;userapp-flatpak-H1IJH3.desktop;

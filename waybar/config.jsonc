@@ -8,7 +8,7 @@
 	// Choose the order of the modules
 	"modules-left": ["custom/power", "pulseaudio", "custom/player", "clock"],
 	"modules-center": ["hyprland/workspaces"],
-	"modules-right": ["custom/network", "custom/bluetooth", "cpu", "memory", "disk", "backlight", "battery", "battery#bat2"],
+	"modules-right": ["custom/network", "custom/bluetooth", "cpu", "memory", "disk", "custom/backlight", "custom/battery"],
 	// Modules configuration
 	"hyprland/workspaces": {
 		"all-outputs": true,
@@ -110,6 +110,22 @@
 		"on-click-middle": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
 		"on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
 	},
+	"custom/backlight": {
+		"exec": "~/.config/waybar/widgets/backlight.sh",
+		"interval": 1,
+		"return-type": "json",
+		"format":"{percentage}% {text}",
+    "on-scroll-up": "brightnessctl set +5%",
+    "on-scroll-down": "brightnessctl set 5%-",
+    "on-click": "brightnessctl set 100%",
+    "on-click-right": "brightnessctl set 1%"
+	},
+	"custom/battery": {
+		"exec": "~/.config/waybar/widgets/battery.sh",
+		"interval": 2,
+		"return-type": "json",
+		"format":"{percentage}% {text}"
+	},
 	"custom/network": {
 		"exec": "~/.config/waybar/widgets/wifi.sh",
 		"interval": 2,
@@ -120,7 +136,7 @@
 	"custom/bluetooth": {
     "exec": "~/.config/waybar/widgets/bluetooth.sh",
     "interval": 2,
-    "return-type": "text",
+    "return-type": "json",
     "on-click": "blueman-manager"
 	},
 	"custom/player": {

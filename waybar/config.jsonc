@@ -8,7 +8,7 @@
 	// Choose the order of the modules
 	"modules-left": ["custom/power", "pulseaudio", "custom/player", "clock"],
 	"modules-center": ["hyprland/workspaces"],
-	"modules-right": ["network", "cpu", "memory", "disk", "backlight", "battery", "battery#bat2"],
+	"modules-right": ["custom/network", "custom/bluetooth", "cpu", "memory", "disk", "backlight", "battery", "battery#bat2"],
 	// Modules configuration
 	"hyprland/workspaces": {
 		"all-outputs": true,
@@ -110,8 +110,21 @@
 		"on-click-middle": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
 		"on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
 	},
+	"custom/network": {
+		"exec": "~/.config/waybar/widgets/wifi.sh",
+		"interval": 2,
+		"return-type": "json",
+		"on-click": "~/.config/waybar/scripts/wifi_menu.sh",
+		"format":"{percentage}% {text}"
+	},
+	"custom/bluetooth": {
+    "exec": "~/.config/waybar/widgets/bluetooth.sh",
+    "interval": 2,
+    "return-type": "text",
+    "on-click": "blueman-manager"
+	},
 	"custom/player": {
-		"exec": "~/.config/waybar/scripts/player.sh",
+		"exec": "~/.config/waybar/widgets/player.sh",
 		"interval": 2,
 		"return-type": "text",
 		"on-click": "playerctl play-pause"

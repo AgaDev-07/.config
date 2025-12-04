@@ -7,7 +7,7 @@ if [[ -z "$is_valid" ]]; then
 fi
 
 player=$(playerctl -l 2>/dev/null | head -n1)
-title=$(playerctl metadata --format '{{ title }}' 2>/dev/null || echo 'Sin reproducción')
+title=$(playerctl metadata --format '{{ title }}' 2>/dev/null || echo '')
 artist=$(playerctl metadata --format '{{ artist }}' 2>/dev/null || echo '')
 
 if [[ $player == *'spotify'* ]]; then
@@ -18,9 +18,6 @@ elif [[ $player == *'brave'* ]]; then
   else
     icon=''
   fi
-elif [[ $player == *'vlc'* ]]; then
-  icon='󰕼'
-
 elif [[ $player == *'mpv'* ]]; then
   icon=''
 else
@@ -32,4 +29,7 @@ if [[ ${#title} -gt $max ]]; then
   title=\"${title:0:$max}...\";
 fi
 
+if [[ -z $title ]]; then
+  exit 1
+fi
 echo $icon  $artist: $title

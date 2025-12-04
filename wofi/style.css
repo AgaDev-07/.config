@@ -1,3 +1,7 @@
+* {
+    font-family: "Symbols Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+}
+
 #input {
     margin: 5px;
     border-radius: 0px;
@@ -11,7 +15,6 @@
     background-color: #333333;
 
 }
-
 #outer-box {
     margin: 5px;
     background-color: #333333;

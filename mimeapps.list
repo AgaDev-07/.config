@@ -10,3 +10,4 @@ application/vnd.flatpak=userapp-flatpak-H1IJH3.desktop
 [Added Associations]
 application/vnd.rar=org.gnome.FileRoller.desktop;userapp-unrar-3MB7G3.desktop;
 application/vnd.flatpak=userapp-flatpak install-T033G3.desktop;userapp-flatpak-H1IJH3.desktop;
+application/x-theme=code.desktop;

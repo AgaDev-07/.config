@@ -54,13 +54,9 @@ PROMPT='%F{cyan}󰣇 %f %F{magenta}%n%f $(dir_icon) %F{red}%~%f${vcs_info_msg_0_
 # ===================================
 # 🔍 Variables de entorno
 # ===================================
-export GTK_THEME=Adwaita:dark
 export XCURSOR_THEME=RedCursor
 export XCURSOR_SIZE=24
-export QT_QPA_PLATFORMTHEME=qt6ct
-export QT_STYLE_OVERRIDE=Adwaita-Dark
 export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 
 # ===================================

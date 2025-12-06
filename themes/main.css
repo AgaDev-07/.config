@@ -12,7 +12,7 @@
 @define-color switch-slider     @base;
 @define-color border            @base;
 
-@define-color background-alt    alpha(@base-bg, .7);
-@define-color background        alpha(@base-bg, .4);
+@define-color background-alt    alpha(@base-bg, .4);
+@define-color background        alpha(@base-bg, .7);
 
 @import 'red.css';

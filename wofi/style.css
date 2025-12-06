@@ -1,34 +1,38 @@
-* {
-    font-family: "Symbols Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+@import '.config/themes/main.css';
+
+window {
+    border-radius: 10px;
+    border: 2px solid @border;
+    background-color: @background;
 }
 
-#input {
-    margin: 5px;
-    border-radius: 0px;
-    border: none;
-    border-bottom: 3px solid black;
-    background-color: #333333;
-    color: white;
+/* Cada app será un bloque que Wofi acomodará solo */
+#entry {
+    padding: 10px;
+    margin: 0 2px;
+    background: transparent;
+    border-radius: 8px;
 }
-
-#inner-box {
-    background-color: #333333;
-
-}
-#outer-box {
-    margin: 5px;
-    background-color: #333333;
-}
-
-#text {
-    padding: 5px;
-    color: white;
-}
-
 #entry:nth-child(even){
-    background-color: #3f3f3f;
+    background: @background-alt;
+}
+#entry:selected {
+    background: @hover;
+}
+#entry:first-child {
+    margin-top: 2px;
+}
+#entry:last-child {
+    margin-bottom: 2px;
 }
 
-#entry:selected {
-    background-color: #e25252;
+/* Icono */
+#img {
+    font-size: 42px;
+    margin-bottom: 6px;
+}
+
+/* Texto */
+#text {
+    font-size: 13px;
 }

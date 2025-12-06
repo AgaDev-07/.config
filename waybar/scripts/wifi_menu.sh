@@ -1,5 +1,7 @@
 #!/bin/bash
 
+MAX_SSID=10
+
 IFACE=$(nmcli device status | awk '/wifi/ {print $1; exit}')
 CURRENT_SSID=$(nmcli -t -f ACTIVE,SSID dev wifi | grep '^sí' | cut -d: -f2)
 
@@ -61,8 +63,19 @@ NETWORKS=$(nmcli -t -f SSID,SIGNAL,SECURITY dev wifi | grep -v '^:$' | sort -t: 
     fi
 done)
 
+COUNT=$(echo "$NETWORKS" | wc -l)
+
+if [[ $COUNT -ge $MAX_SSID ]]; then
+    COUNT=$MAX_SSID
+fi
+
 # Mostrar menú con Wofi
-CHOICE=$(echo "$NETWORKS" | wofi --dmenu --prompt "Wi-Fi:")
+CHOICE=$(echo "$NETWORKS" | wofi \
+    --show dmenu \
+    --allow-images \
+    --hide-search \
+    --prompt "Wi-Fi:" \
+    -l 3 -L $COUNT -x "-10" -y 10 -W 25%)
 
 # Si no se eligió nada, salir
 [ -z "$CHOICE" ] && exit 0

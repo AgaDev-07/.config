@@ -11,15 +11,17 @@ window#waybar {
     color: @foreground;
     transition-property: background-color;
     transition-duration: .5s;
+    padding: 10px;
+    margin-bottom: 0;
 }
 
 .modules-left {
+    margin-top: 10px;
+    margin-left: 10px;
     background: @background-alt;
-    padding: 0 15px 0 5px;
-    border-bottom: 2px solid @border;
-    border-right: 2px solid @border;
-    border-bottom-left-radius: 20px;
-    border-top-right-radius: 20px;
+    padding-right: 10px;
+    border: 2px solid @border;
+    border-radius: 20px;
 }
 #custom-power {
     padding: 0 5px 0 10px;
@@ -28,47 +30,41 @@ window#waybar {
     color: @hover;
 }
 .modules-center {
+    margin-top: 10px;
     background: @background-alt;
-    border-bottom: 2px solid @border;
-    border-left: 2px solid @border;
-    border-right: 2px solid @border;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border: 2px solid @border;
+    border-radius: 20px;
 }
 
-#workspaces {
-    padding: 0 15px;
-}
 #workspaces button {
-    padding: 0 2px;
+    padding: 0 0;
     background-color: transparent;
     color: currentColor;
 }
 
 #workspaces button:hover {
-    color: @hover;
+    color: alpha(currentColor, .7);
     background: transparent;
     box-shadow: none;
-    border: none;
+    border-color: transparent;
 }
 #workspaces button.active {
+    background: @base;
+    color: @base-bg;
+    border: alpha(@base, .7);
+    padding: 0 1em;
+    border-radius: 20px;
 }
 .modules-right {
+    margin-top: 10px;
+    margin-right: 10px;
     background: @background-alt;
     padding: 0 15px 0 15px;
-    border-bottom: 2px solid @border;
-    border-left: 2px solid @border;
-    border-bottom-right-radius: 20px;
-    border-top-left-radius: 20px;
+    border: 2px solid @border;
+    border-radius: 20px;
 }
 
 #clock,
-#battery,
-#cpu,
-#memory,
-#disk,
-#backlight,
-#network,
 #pulseaudio {
     background-color: transparent;
     color: currentColor;

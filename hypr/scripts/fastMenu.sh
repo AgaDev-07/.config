@@ -1,8 +1,27 @@
 #!/bin/bash
 
-ICON_THEME=$(grep "^gtk-icon-theme-name=" /home/Adrian/.config/gtk-3.0/settings.ini | cut -d= -f2)
+# =========================
+# Dependencias obligatorias
+# =========================
+require() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "Error: falta '$1'" >&2
+    exit 1
+  fi
+}
 
-apps=$(cat <<EOF
+require wofi
+
+# =========================
+# Configuración
+# =========================
+SETTINGS="$HOME/.config/gtk-3.0/settings.ini"
+ICON_THEME=$(grep "^gtk-icon-theme-name=" "$SETTINGS" 2>/dev/null | cut -d= -f2)
+
+# fallback si no encuentra tema
+ICON_THEME="${ICON_THEME:-Papirus}"
+
+APPS=$(cat <<EOF
 Brave
 Discord
 Visual Studio Code
@@ -13,89 +32,153 @@ Minecraft
 EOF
 )
 
+# =========================
+# Función: limpiar Exec=
+# =========================
+sanitize_exec() {
+  local cmd="$1"
+  # remover flags de archivos
+  cmd="${cmd//%U/}"
+  cmd="${cmd//%u/}"
+  cmd="${cmd//%F/}"
+  cmd="${cmd//%f/}"
+  # limpiar espacios
+  echo "$cmd" | sed 's/[[:space:]]*$//'
+}
+
+# =========================
+# Función: obtener comando ejecutable
+# =========================
 get_cmd() {
-    local app="$1"
+  local app="$1"
 
-    case "$app" in
-        "Minecraft")
-            echo "flatpak run io.mrarm.mcpelauncher"
-            return
-        ;;
-    esac
+  case "$app" in
+    "Minecraft")
+      echo "flatpak run com.mcpelauncher.MCPELauncher"
+      return
+    ;;
+  esac
 
-    # Buscar archivo .desktop
-    local desktop
-    desktop=$(grep -Rl "^Name=${app}$" \
-        /usr/share/applications ~/.local/share/applications 2>/dev/null | head -n 1)
+  # Buscar archivo .desktop
+  local desktop
+  desktop=$(grep -Rl "^Name=${app}$" \
+    /usr/share/applications \
+    ~/.local/share/applications \
+    2>/dev/null | head -n 1)
 
-    # Si no existe el .desktop → fallback a nombre normal en minúsculas
-    if [[ -z "$desktop" ]]; then
-        echo "$(echo "$app" | tr 'A-Z' 'a-z')"
-        return
-    fi
+  # Fallback a nombre en minúsculas
+  if [[ -z "$desktop" || ! -f "$desktop" ]]; then
+    echo "$(echo "$app" | tr 'A-Z' 'a-z')"
+    return
+  fi
 
-    # Obtener Exec=
-    local exec_cmd
-    exec_cmd=$(grep "^Exec=" "$desktop" | head -n 1 | cut -d= -f2)
+  # Extraer Exec=
+  local exec_cmd
+  exec_cmd=$(grep -m1 "^Exec=" "$desktop" | cut -d= -f2-)
 
-    # Si Exec= esta vacío → fallback
-    if [[ -z "$exec_cmd" ]]; then
-        echo "$(echo "$app" | tr 'A-Z' 'a-z')"
-        return
-    fi
+  # Fallback
+  if [[ -z "$exec_cmd" ]]; then
+    echo "$(echo "$app" | tr 'A-Z' 'a-z')"
+    return
+  fi
 
-    # Quitar argumentos como %U o %F
-    exec_cmd=${exec_cmd//%U/}
-    exec_cmd=${exec_cmd//%u/}
-    exec_cmd=${exec_cmd//%F/}
-    exec_cmd=${exec_cmd//%f/}
-
-    echo $exec_cmd | sed 's/[[:space:]]*$//'
+  sanitize_exec "$exec_cmd"
 }
 
+# =========================
+# Función: comprobar si existe comando ejecutable
+# =========================
 exists() {
-    command -v "$1" >/dev/null 2>&1 && echo 1 || echo 0
+  local cmd="$1"
+  # tomar primera palabra, ej: "brave --incognito"
+  local bin=${cmd%% *}
+  command -v "$bin" >/dev/null 2>&1 && echo 1 || echo 0
 }
 
-# Mostrar iconos y nombres en bloques
+# =========================
+# Función: obtener icono
+# =========================
+get_icon() {
+  local app="$1"
+
+  local desktop
+  desktop=$(grep -Rl "^Name=${app}$" \
+    /usr/share/applications \
+    ~/.local/share/applications \
+    2>/dev/null | head -n 1)
+
+  if [[ -n "$desktop" ]]; then
+    local icon=$(grep -m1 "^Icon=" "$desktop" | cut -d= -f2)
+    [[ -n "$icon" ]] && echo "$icon" && return
+  fi
+
+  echo "$(echo "$app" | tr 'A-Z' 'a-z')"  # fallback icon
+}
+
+# =========================
+# Construcción del menú
+# =========================
 formatted=""
 
-
 while IFS= read -r app; do
-    desktop=$(grep -Rl "^Name=${app}$" \
-        /usr/share/applications ~/.local/share/applications 2>/dev/null | head -n 1)
+  exe=$(get_cmd "$app")
 
-    if [[ -n "$desktop" && -f "$desktop" ]]; then
-        icon=$(grep -m 1 "^Icon=" "$desktop" | cut -d= -f2)
-    else
-        icon=$(echo "$app" | tr 'A-Z' 'a-z')
+  # Verificación robusta
+  if [[ -z "$exe" ]] || [[ $(exists "$exe") -eq 0 ]]; then
+    echo "[SKIP] $app → comando inválido ($exe)"
+    continue
+  fi
+
+  icon=$(get_icon "$app")
+
+  # Comprobar que realmente exista el icono
+  ICON_PATH=""
+  for size in scalable 256 128 64 48 32 24 22 16; do
+    try="/usr/share/icons/$ICON_THEME/${size}x${size}/apps/$icon.svg"
+    if [[ -f "$try" ]]; then
+      ICON_PATH="$try"
+      break
     fi
+  done
 
-    # Convertir nombre → ejecutable
-    exe=$(get_cmd "$app")
-    echo "$app -> $exe $(exists "$exe")"
-    # Si no se pudo mapear o no existe ese comando, saltar la app
-    if [[ -z "$exe" ]] || [[ $(exists "$exe") -eq 0 ]]; then
-        continue
-    fi
+  # fallback ultrafuerte a tema hicolor
+  if [[ -z "$ICON_PATH" ]]; then
+    ICON_PATH="/usr/share/icons/hicolor/48x48/apps/$icon.svg"
+  fi
 
-    # Añadir salto de línea si no es  el primer elemento
-    if [[ -n "$formatted" ]]; then
-        formatted+=$'\n'
-    fi
+  # fallback final a ícono default
+  if [[ ! -f "$ICON_PATH" ]]; then
+    ICON_PATH="/usr/share/pixmaps/$icon.png"
+  fi
 
-    # Bloque tipo grid: icono encima, nombre debajo
-    formatted+=$(echo "img:/usr/share/icons/$ICON_THEME/48x48/apps/$icon.svg:text:$app")
-done <<< "$apps"
+  # fallback extremo: si no existe nada, no pone imagen
+  if [[ ! -f "$ICON_PATH" ]]; then
+    ICON_PATH=""
+  fi
 
+  [[ -n "$formatted" ]] && formatted+=$'\n'
+
+  if [[ -n "$ICON_PATH" ]]; then
+    formatted+="img:$ICON_PATH:text:$app"
+  else
+    formatted+="text:$app"
+  fi
+
+done <<< "$APPS"
+
+# =========================
+# Mostrar menú
+# =========================
 chosen=$(echo -e "$formatted" | wofi \
-    --show dmenu \
-    --allow-images \
-    --hide-search \
-    --prompt "" \
-    --location=center)
+  --show dmenu \
+  --allow-images \
+  --hide-search \
+  --prompt "" \
+  --location=center)
 
 [ -z "$chosen" ] && exit 0
 
 selected_app=$(echo "$chosen" | awk -F':' '{print $NF}')
+
+# Ejecutar en background
 $(get_cmd "$selected_app") &

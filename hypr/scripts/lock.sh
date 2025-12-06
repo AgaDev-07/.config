@@ -1,26 +1,82 @@
 #!/bin/bash
 
 # =========================
-# Hyprlock SDDM-style (Hypr-Ely-Neon)
+# Dependencias obligatorias
 # =========================
-
-read_conf() {
-  grep "^$1=" "$THEME_CONF" | cut -d'=' -f2 | tr -d '"'
+require() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "Error: falta '$1'" >&2
+    exit 1
+  fi
 }
 
+require grim
+require magick
+
+# =========================
+# Hyprlock SDDM-style (Hypr-Ely-Neon)
+# Fondo dinámico con captura, blur y overlay
+# =========================
+
+set -e
 
 # Configuración
-THEME_CONF="/usr/share/sddm/themes/hypr-ely-neon/theme.conf"
-WALLPAPER="/usr/share/sddm/themes/hypr-ely-neon/$(read_conf "Background")"
 IMAGES_DIR="$HOME/.config/hypr/images"
 OUTPUT="$IMAGES_DIR/background.png"
+THEME_CONF="/usr/share/sddm/themes/hypr-ely-neon/theme.conf"
+USE_SCREENSHOT="true"
+CLEAN_TEMP="true"
+
 mkdir -p "$IMAGES_DIR"
 
+# =========================
+# Funciones auxiliares
+# =========================
 
-SCREEN_W=$(read_conf "ScreenWidth")
-SCREEN_H=$(read_conf "ScreenHeight")
+# Lectura de valores en theme.conf con fallback si no existe o está vacío
+read_conf() {
+  local val
+  val=$(grep -E "^$1=" "$THEME_CONF" 2>/dev/null | cut -d= -f2 | tr -d '"')
+  echo "${val:-0}"    # fallback a 0 si está vacío
+}
+
+# =========================
+# Captura o usa imagen del tema
+# =========================
+
+get_base() {
+  local outfile="$IMAGES_DIR/background_base.png"
+
+  # Intentar captura
+  grim -g "0,0 ${SCREEN_W}x${SCREEN_H}" "$outfile" || true
+
+  # Si no hay archivo válido → usar fondo del tema
+  if [[ ! -s "$outfile" || "$USE_SCREENSHOT" == "false" ]]; then
+    local BACKGROUND="/usr/share/sddm/themes/hypr-ely-neon/$(read_conf "Background")"
+
+    local resize_flag="-resize ${SCREEN_W}x${SCREEN_H}^"
+    [[ "$SCALE_IMAGE" != "true" ]] && resize_flag="-resize ${SCREEN_W}x${SCREEN_H}"
+
+    magick "$BACKGROUND" \
+      $resize_flag \
+      -gravity "$GRAVITY" \
+      -extent ${SCREEN_W}x${SCREEN_H} \
+      "$outfile"
+  fi
+
+  echo "$outfile"
+}
+
+# =========================
+# Leer configuración del tema
+# =========================
+
+# Obtener resolución real del monitor activo
+RES=$(hyprctl monitors | grep -Eo '[0-9]+x[0-9]+' | head -n1)
+SCREEN_W=${RES%x*}
+SCREEN_H=${RES#*x}
 FORM_POSITION=$(read_conf "FormPosition")
-FORM_WIDTH=$(($SCREEN_W / 3))
+FORM_WIDTH=$((SCREEN_W / 3))
 FORM_HEIGHT=$SCREEN_H
 PARTIAL_BLUR=$(read_conf "PartialBlur")
 BLUR_RADIUS=$(read_conf "BlurRadius")
@@ -30,15 +86,15 @@ BG_ALIGN_H=$(read_conf "BackgroundImageHAlignment")
 BG_ALIGN_V=$(read_conf "BackgroundImageVAlignment")
 
 # =========================
-# Ajustes de alineación horizontal
+# Alineación de fondo
 # =========================
+
 case "$BG_ALIGN_H" in
   left) GRAVITY_H="West" ;;
   right) GRAVITY_H="East" ;;
-  center|*) GRAVITY_H="Center" ;;
+  *) GRAVITY_H="Center" ;;
 esac
 
-# Ajustes de alineación vertical
 case "$BG_ALIGN_V" in
   top) GRAVITY_V="North" ;;
   bottom) GRAVITY_V="South" ;;
@@ -48,44 +104,59 @@ esac
 GRAVITY="$GRAVITY_H$GRAVITY_V"
 
 # =========================
-# 1️⃣ Escalar y recortar proporcionalmente
+# Generar fondo base
 # =========================
-BASE="$IMAGES_DIR/background_base.png"
-if [ "$SCALE_IMAGE" = "true" ]; then
-    magick "$WALLPAPER" -resize ${SCREEN_W}x${SCREEN_H}^ -gravity $GRAVITY -extent ${SCREEN_W}x${SCREEN_H} "$BASE"
-else
-    magick "$WALLPAPER" -resize ${SCREEN_W}x${SCREEN_H} -gravity $GRAVITY -extent ${SCREEN_W}x${SCREEN_H} "$BASE"
-fi
 
-# =========================
-# 2️⃣ Crear el blur detrás del formulario
-# =========================
+BASE=$(get_base)
 BLUR="$IMAGES_DIR/background_blur.png"
 
-if [ "$PARTIAL_BLUR" = "true" ]; then
+# =========================
+# Crear blur detrás del formulario
+# =========================
+
+if [[ "$PARTIAL_BLUR" == "true" ]]; then
+
   case "$FORM_POSITION" in
-    left) POS_X=0 ;;
-    center) POS_X=$(($SCREEN_W/2 - $FORM_WIDTH/2)) ;;
-    right) POS_X=$(($SCREEN_W - $FORM_WIDTH)) ;;
-    *) POS_X=0 ;;
+    left)   POS_X=0 ;;
+    center) POS_X=$((SCREEN_W/2 - FORM_WIDTH/2)) ;;
+    right)  POS_X=$((SCREEN_W - FORM_WIDTH)) ;;
+    *)    POS_X=0 ;;
   esac
 
-  magick "$BASE" -crop ${FORM_WIDTH}x${FORM_HEIGHT}+${POS_X}+0 +repage -blur 0x${BLUR_RADIUS} "$BLUR"
+  # Crop + blur
+  magick "$BASE" \
+    -crop ${FORM_WIDTH}x${FORM_HEIGHT}+${POS_X}+0 +repage \
+    -blur 0x${BLUR_RADIUS} \
+    "$BLUR"
 
-  # Combinar el blur con el fondo
-  magick "$BASE" "$BLUR" -geometry +${POS_X}+0 -composite "$OUTPUT"
+  # Mezclar blur con fondo base
+  magick "$BASE" "$BLUR" \
+    -geometry +${POS_X}+0 -composite \
+    "$OUTPUT"
+
 else
   cp "$BASE" "$OUTPUT"
 fi
 
 # =========================
-# 3️⃣ Overlay semitransparente
+# Overlay semitransparente
 # =========================
+
 if (( $(echo "$OVERLAY_OPACITY > 0" | bc -l) )); then
-  magick "$OUTPUT" -fill "rgba(0,0,0,${OVERLAY_OPACITY})" -draw "rectangle 0,0 ${SCREEN_W},${SCREEN_H}" "$OUTPUT"
+  magick "$OUTPUT" \
+    -fill "rgba(0,0,0,${OVERLAY_OPACITY})" \
+    -draw "rectangle 0,0 ${SCREEN_W},${SCREEN_H}" \
+    "$OUTPUT"
 fi
 
 # =========================
-# 4️⃣ Limpiar temporales
+# Limpieza
 # =========================
-rm -f "$BASE" "$BLUR"
+if [[ "$CLEAN_TEMP" == "true" ]]; then
+  rm -f "$BASE" "$BLUR"
+fi
+
+# =========================
+# Lanzar Hyprlock
+# =========================
+hyprlock

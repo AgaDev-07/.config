@@ -1,34 +1,46 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Widget de brillo para Waybar
-
 # Requiere: brightnessctl
 
-# Obtener brillo actual (0-100)
-BRIGHT=$(brightnessctl -m | awk -F, '{print substr($4,1,length($4)-1)}')
+# =========================
+# Dependencias
+# =========================
+require() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "Error: falta '$1'" >&2
+    exit 1
+  fi
+}
 
-# Iconos según nivel
-if [ "$BRIGHT" == 100 ]; then
-    ICON="󰛨"
-elif [ "$BRIGHT" -ge 90 ]; then
-    ICON="󱩖"
-elif [ "$BRIGHT" -ge 80 ]; then
-    ICON="󱩕"
-elif [ "$BRIGHT" -ge 70 ]; then
-    ICON="󱩔"
-elif [ "$BRIGHT" -ge 60 ]; then
-    ICON="󱩓"
-elif [ "$BRIGHT" -ge 50 ]; then
-    ICON="󱩒"
-elif [ "$BRIGHT" -ge 40 ]; then
-    ICON="󱩑"
-elif [ "$BRIGHT" -ge 30 ]; then
-    ICON="󱩐"
-elif [ "$BRIGHT" -ge 20 ]; then
-    ICON="󱩏"
-elif [ "$BRIGHT" -ge 10 ]; then
-    ICON="󱩎"
-else
-    ICON="󰛩"
+require brightnessctl
+
+# =========================
+# Obtener brillo actual (0-100)
+# =========================
+BRIGHT=$(brightnessctl -m 2>/dev/null | awk -F, '{val=substr($4,1,length($4)-1); if(val>100) val=100; else if(val<0) val=0; print val}')
+
+# Si falla, salir
+if [[ -z "$BRIGHT" ]]; then
+  BRIGHT=0
 fi
 
-echo {\"text\": \"$ICON\", \"percentage\": $BRIGHT }
+# =========================
+# Iconos según nivel
+# =========================
+if (( BRIGHT >= 100 )); then ICON=󰛨
+elif (( BRIGHT >= 90 )); then ICON=󱩖
+elif (( BRIGHT >= 80 )); then ICON=󱩕
+elif (( BRIGHT >= 70 )); then ICON=󱩔
+elif (( BRIGHT >= 60 )); then ICON=󱩓
+elif (( BRIGHT >= 50 )); then ICON=󱩒
+elif (( BRIGHT >= 40 )); then ICON=󱩑
+elif (( BRIGHT >= 30 )); then ICON=󱩐
+elif (( BRIGHT >= 20 )); then ICON=󱩏
+elif (( BRIGHT >= 10 )); then ICON=󱩎
+else ICON=󰛩
+fi
+
+# =========================
+# Salida JSON para Waybar
+# =========================
+echo "{\"text\": \"$ICON\", \"percentage\": $BRIGHT}"

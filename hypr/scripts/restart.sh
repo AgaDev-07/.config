@@ -1,31 +1,89 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-CLASS=$(hyprctl activewindow | grep "class:" | sed 's/.*class: //')
-LOGO=~/.config/hypr/images/logo.webp
+# ======================================
+# Función require() para validar comandos
+# ======================================
+require() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "Error: falta '$1'" >&2
+    exit 1
+  fi
+}
+
+require hyprctl
+require notify-send
+require pgrep
+require nohup
+
+# ======================================
+# Configuración
+# ======================================
+LOGO="$HOME/.config/hypr/images/logo.webp"
 APPLICATION="Hyprland"
 
-# Si no se obtuvo nada, salir
-if [ -z "$CLASS" ]; then
-    notify-send -u critical -a $APPLICATION -i $LOGO $APPLICATION "No se detectó ninguna ventana activa."
-    exit 1
+# ======================================
+# Obtener CLASE de la ventana activa
+# ======================================
+CLASS=$(hyprctl activewindow 2>/dev/null | grep -m1 "class:" | sed 's/.*class: //')
+
+if [[ -z "$CLASS" ]]; then
+  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
+    "$APPLICATION" "No se detectó ninguna ventana activa."
+  exit 1
 fi
 
-if [ "$CLASS" == "brave-browser" ]; then
-    CLASS="brave"
-fi
+# Normalización de clases especiales
+case "$CLASS" in
+  brave-browser) CLASS="brave" ;;
+esac
 
-# Buscar el PID de un proceso que coincida con la clase
+# ======================================
+# Buscar PID del proceso
+# ======================================
 PID=$(pgrep -f "$CLASS" | head -n 1)
 
-if [ -n "$PID" ]; then
-    # Obtener el nombre del proceso
-    CMD=$(ps -p $PID -o comm= | head -n 1)
-
-    #notify-send "Hyprland" "Reiniciando $CMD..."
-    notify-send -u low -a $APPLICATION -i $LOGO $APPLICATION "Reiniciando $CMD… · $(date +'%H:%M:%S')"
-    kill $PID
-    sleep 0.5
-    nohup $CMD >/dev/null 2>&1 &
-else
-    notify-send -u critical -a $APPLICATION -i $LOGO $APPLICATION "No se pudo reiniciar el programa $CLASS"
+if [[ -z "$PID" ]]; then
+  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
+    "$APPLICATION" "No se encontró ningún proceso asociado a '$CLASS'."
+  exit 1
 fi
+
+# ======================================
+# Obtener nombre del comando real
+# ======================================
+CMD=$(ps -p "$PID" -o comm= | head -n 1)
+
+if [[ -z "$CMD" ]]; then
+  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
+    "$APPLICATION" "No se pudo obtener el comando del proceso '$CLASS'."
+  exit 1
+fi
+
+# Evitar reiniciar Hyprland o procesos críticos
+if [[ "$CMD" == "Hyprland" ]] || [[ "$CMD" == "systemd" ]] || [[ "$CMD" == "init" ]]; then
+  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
+    "$APPLICATION" "Por seguridad no se reiniciará el proceso '$CMD'."
+  exit 1
+fi
+
+# Verificar si el comando existe antes de reiniciar
+if ! command -v "$CMD" &>/dev/null; then
+  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
+    "$APPLICATION" "El comando '$CMD' no es ejecutable o no existe en PATH."
+  exit 1
+fi
+
+# ======================================
+# Reinicio seguro
+# ======================================
+notify-send -u low -a "$APPLICATION" -i "$LOGO" \
+  "$APPLICATION" "Reiniciando $CMD… · $(date +'%H:%M:%S')"
+
+kill "$PID" 2>/dev/null
+
+sleep 0.4
+
+# Reiniciar con nohup, preservando rutas con espacios
+nohup "$CMD" >/dev/null 2>&1 & disown
+
+exit 0

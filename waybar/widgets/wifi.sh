@@ -1,51 +1,65 @@
 #!/bin/bash
+# Widget de red para Waybar
+# Requiere: nmcli, awk, ip
 
-# Mostrar iconos ethernet
+# =========================
+# Dependencias
+# =========================
+require() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "Error: falta '$1'" >&2
+    exit 1
+  fi
+}
+
+require nmcli
+
+# =========================
+# Comprobar Ethernet
+# =========================
 ETH_IFACE=$(nmcli device status | awk '/ethernet/ && $3=="conectado" {print $1; exit}')
-
 if [ -n "$ETH_IFACE" ]; then
-    echo "{\"text\": \"\", \"tooltip\": \"Ethernet: $ETH_IFACE\", \"percentage\": 100 }"
-    exit 0
+  echo "{\"text\": \"\", \"tooltip\": \"Ethernet: $ETH_IFACE\", \"percentage\": 100}"
+  exit 0
 fi
 
-# Muestra redes Wi-Fi
+# =========================
+# Comprobar Wi-Fi
+# =========================
+IFACE=$(nmcli device status | awk '/wifi/ {print $1; exit}')
+[ -z "$IFACE" ] && echo '{"text":"睊","tooltip":"Sin Wi-Fi","percentage":0}' && exit 0
 
-# Nivel de señal (0-100)
+ACTIVE_SSID=$(nmcli -t -f ACTIVE,SSID dev wifi | awk -F: '$1=="sí"{print $2}')
 SIGNAL=$(nmcli -t -f IN-USE,SIGNAL dev wifi | awk -F: '/\*/{print $2}')
 [ -z "$SIGNAL" ] && SIGNAL=0
 
-ICON=$(if [ "$SIGNAL" -ge 80 ]; then
-    echo "󰤨"
-elif [ "$SIGNAL" -ge 60 ]; then
-    echo "󰤥"
-elif [ "$SIGNAL" -ge 40 ]; then
-    echo "󰤢"
-elif [ "$SIGNAL" -ge 20 ]; then
-    echo "󰤟"
+# =========================
+# Iconos según señal
+# =========================
+if (( SIGNAL >= 80 )); then
+  ICON="󰤨"
+elif (( SIGNAL >= 60 )); then
+  ICON="󰤥"
+elif (( SIGNAL >= 40 )); then
+  ICON="󰤢"
+elif (( SIGNAL >= 20 )); then
+  ICON="󰤟"
 else
-    echo "󰤯"
-fi)
+  ICON="󰤯"
+fi
 
-
-### ToolTip
-
-# Interfaz wifi (la primera que encuentre)
-IFACE=$(nmcli device status | awk '/wifi/ {print $1; exit}')
-[ -z "$IFACE" ] && echo "睊" && exit 0  # icono de no wifi
-
-# Señal de la red activa
-ACTIVE_SSID=$(nmcli -t -f ACTIVE,SSID dev wifi | awk -F: '$1=="sí"{print $2}')
-
-TOOLTIP="SSID: $ACTIVE_SSID\\nSeñal: $SIGNAL%"
+# =========================
+# Tooltip con información
+# =========================
+TOOLTIP="SSID: ${ACTIVE_SSID:-Desconocido}\\nSeñal: $SIGNAL%"
 
 IPv4=$(ip -4 addr show "$IFACE" | awk '/inet /{print $2}')
-if [ -n "$IPv4" ]; then
-    TOOLTIP="$TOOLTIP\\nIPv4: $IPv4"
-fi
+[ -n "$IPv4" ] && TOOLTIP="$TOOLTIP\\nIPv4: $IPv4"
 
 IPv6=$(ip -6 addr show "$IFACE" | awk '/inet /{print $2}')
-if [ -n "$IPv6" ]; then
-    TOOLTIP="$TOOLTIP\\nIPv6: $IPv6"
-fi
+[ -n "$IPv6" ] && TOOLTIP="$TOOLTIP\\nIPv6: $IPv6"
 
-echo {\"text\": \"$ICON\", \"tooltip\": \"$TOOLTIP\", \"percentage\": $SIGNAL }
+# =========================
+# Salida JSON
+# =========================
+echo "{\"text\": \"$ICON\", \"tooltip\": \"$TOOLTIP\", \"percentage\": $SIGNAL}"

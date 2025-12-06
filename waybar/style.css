@@ -1,81 +1,80 @@
 @import '../themes/main.css';
 
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
-    font-family: "Symbols Nerd Font", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 13px;
+	/* `otf-font-awesome` is required to be installed for icons */
+	font-family: 'Symbols Nerd Font', Roboto, Helvetica, Arial, sans-serif;
+	font-size: 13px;
 }
 
 window#waybar {
-    background-color: transparent;
-    color: @foreground;
-    transition-property: background-color;
-    transition-duration: .5s;
-    padding: 10px;
-    margin-bottom: 0;
+	background-color: transparent;
+	color: @foreground;
+	transition-property: background-color;
+	transition-duration: 0.5s;
+	padding: 10px;
+	margin-bottom: 0;
 }
 
 .modules-left {
-    margin-top: 10px;
-    margin-left: 10px;
-    background: @background-alt;
-    padding-right: 10px;
-    border: 2px solid @border;
-    border-radius: 20px;
+	margin-top: 10px;
+	margin-left: 10px;
+	background: @background-alt;
+	padding-right: 10px;
+	border: 2px solid @border;
+	border-radius: 20px;
 }
 #custom-power {
-    padding: 0 5px 0 10px;
+	padding: 0 5px 0 10px;
 }
 #custom-power:hover {
-    color: @hover;
+	color: @hover;
 }
 #workspaces button {
-    padding: 0 0;
-    background-color: transparent;
-    color: currentColor;
-    font-weight: bolder;
+	padding: 0 0;
+	background-color: transparent;
+	color: currentColor;
+	font-weight: bolder;
 }
 #workspaces button:hover {
-    color: alpha(currentColor, .7);
-    background: transparent;
-    box-shadow: none;
-    border-color: transparent;
+	color: alpha(currentColor, 0.7);
+	background: transparent;
+	box-shadow: none;
+	border-color: transparent;
 }
 #workspaces button.active {
-    background: @base;
-    color: @base-bg;
-    border: alpha(@base, .7);
-    padding: 0 1em;
-    border-radius: 20px;
+	background: @base;
+	color: @base-bg;
+	border: alpha(@base, 0.7);
+	padding: 0 1em;
+	border-radius: 20px;
 }
 #window {
-    font-weight: bolder;
+	font-weight: bolder;
 }
 
 .modules-center {
-    margin-top: 10px;
-    background: transparent;
-    border: none;
+	margin-top: 10px;
+	background: transparent;
+	border: none;
 }
 #custom-player {
-    margin: 0 25px;
-    padding: 0 10px;
-    background: @background-alt;
-    border: 2px solid @border;
-    border-radius: 20px;
+	margin: 0 25px;
+	padding: 0 10px;
+	background: @background-alt;
+	border: 2px solid @border;
+	border-radius: 20px;
 }
 
 .modules-right {
-    margin-top: 10px;
-    margin-right: 10px;
-    background: @background-alt;
-    padding: 0 15px 0 15px;
-    border: 2px solid @border;
-    border-radius: 20px;
+	margin-top: 10px;
+	margin-right: 10px;
+	background: @background-alt;
+	padding: 0 15px 0 15px;
+	border: 2px solid @border;
+	border-radius: 20px;
 }
 #clock,
 #pulseaudio {
-    background-color: transparent;
-    color: currentColor;
-    padding: 0 5px;
+	background-color: transparent;
+	color: currentColor;
 }

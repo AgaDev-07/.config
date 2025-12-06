@@ -1,5 +1,3 @@
-max=15;
-
 is_valid=$(playerctl -l 2>/dev/null)
 
 if [[ -z "$is_valid" ]]; then
@@ -22,11 +20,6 @@ elif [[ $player == *'mpv'* ]]; then
   icon=''
 else
   icon='🎵';
-fi
-
-
-if [[ ${#title} -gt $max ]]; then
-  title=\"${title:0:$max}...\";
 fi
 
 if [[ -z $title ]]; then

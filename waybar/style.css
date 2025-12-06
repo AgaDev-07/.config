@@ -29,19 +29,12 @@ window#waybar {
 #custom-power:hover {
     color: @hover;
 }
-.modules-center {
-    margin-top: 10px;
-    background: @background-alt;
-    border: 2px solid @border;
-    border-radius: 20px;
-}
-
 #workspaces button {
     padding: 0 0;
     background-color: transparent;
     color: currentColor;
+    font-weight: bolder;
 }
-
 #workspaces button:hover {
     color: alpha(currentColor, .7);
     background: transparent;
@@ -55,6 +48,23 @@ window#waybar {
     padding: 0 1em;
     border-radius: 20px;
 }
+#window {
+    font-weight: bolder;
+}
+
+.modules-center {
+    margin-top: 10px;
+    background: transparent;
+    border: none;
+}
+#custom-player {
+    margin: 0 25px;
+    padding: 0 10px;
+    background: @background-alt;
+    border: 2px solid @border;
+    border-radius: 20px;
+}
+
 .modules-right {
     margin-top: 10px;
     margin-right: 10px;
@@ -63,7 +73,6 @@ window#waybar {
     border: 2px solid @border;
     border-radius: 20px;
 }
-
 #clock,
 #pulseaudio {
     background-color: transparent;

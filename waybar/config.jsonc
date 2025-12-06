@@ -6,9 +6,14 @@
 	// "width": 1280, // Waybar width
 	"spacing": 4, // Gaps between modules (4px)
 	// Choose the order of the modules
-	"modules-left": ["custom/power", "hyprland/workspaces"],
-	"modules-center": ["pulseaudio", "custom/player"],
-	"modules-right": ["clock", "custom/network", "custom/bluetooth", "custom/backlight", "custom/battery"],
+	"modules-left": ["custom/power", "hyprland/workspaces", "hyprland/window"],
+	"modules-center": ["custom/player"],
+	"modules-right": ["clock", "pulseaudio", "custom/network", "custom/bluetooth", "custom/backlight", "custom/battery"],
+	"hyprland/window": {
+    "format": "",
+    "icon": true,
+		"icon-size": 20
+	},
 	// Modules configuration
 	"hyprland/workspaces": {
 		"all-outputs": true,

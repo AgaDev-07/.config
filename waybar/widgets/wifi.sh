@@ -12,6 +12,9 @@ require() {
   fi
 }
 
+if [[ ! -d "/sys/class/net/wlp1s0" && ! -d "/sys/class/net/enp0s31f6" ]]; then
+  exit 0
+fi
 require nmcli
 
 # =========================

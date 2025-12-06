@@ -10,6 +10,9 @@ require() {
     exit 1
   fi
 }
+if [[ ! -d "/sys/class/bluetooth/hci0" ]]; then
+  exit 0
+fi
 
 require bluetoothctl
 

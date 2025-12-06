@@ -10,6 +10,10 @@ require() {
   fi
 }
 
+if [[ ! -d "/sys/class/net/wlp1s0" ]]; then
+  exit 0
+fi
+
 require nmcli
 require wofi
 require zenity

@@ -15,7 +15,7 @@ fi
 # Leer datos
 # =========================
 STATUS=$(cat "$BAT_PATH/status" 2>/dev/null)
-INFO=$("$HOME/.config/hypr/scripts/widgets/battery.sh")
+INFO=$("$HOME/.config/hypr/widgets/battery.sh")
 
 # =========================
 # Iconos de batería

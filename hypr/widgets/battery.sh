@@ -6,7 +6,7 @@
 BAT_PATH="/sys/class/power_supply/BAT0"
 
 if [[ ! -d "$BAT_PATH" ]]; then
-  echo "100% 󰂄"
+  echo "󰚥"
   exit 0
 fi
 

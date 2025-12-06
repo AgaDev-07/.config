@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # Widget de brillo para Waybar
 # Requiere: brightnessctl
 
@@ -11,6 +11,10 @@ require() {
     exit 1
   fi
 }
+
+if [[ ! -d "/sys/class/backlight" ]]; then
+  exit 0
+fi
 
 require brightnessctl
 

@@ -10,8 +10,8 @@
 	"modules-center": ["custom/player"],
 	"modules-right": ["clock", "pulseaudio", "custom/network", "custom/bluetooth", "custom/backlight", "custom/battery"],
 	"hyprland/window": {
-    "format": "",
-    "icon": true,
+		"format": "",
+		"icon": true,
 		"icon-size": 20
 	},
 	// Modules configuration
@@ -36,14 +36,27 @@
 	},
 	"clock": {
 		"interval": 1,
-		"tooltip-format": "<tt><small>{calendar}</small></tt>",
-		"format-alt": "{:%Y-%m-%d}",
-		"format": "{:%H:%M:%S}"
-	},
-	"backlight": {
-		// "device": "acpi_video1",
-		"format": "{percent}% {icon}",
-		"format-icons": ["", "", "", "", "", "", "", "", ""]
+		"tooltip-format": "<tt>{calendar}</tt>",
+		"format-alt": "{:%d/%m/%Y (%H:%M)} 󰃰 ",
+		"format": "{:%H:%M:%S}  ",
+		"calendar": {
+			"mode-mon-col": 3,
+			"on-scroll": 1,
+			"on-click-right": "mode",
+			"format": {
+				"months": "<span color='#fed'><b>{}</b></span>",
+				"weekdays": "<span color='#fed'>{}</span>",
+				"days": "<span color='#f44'>{}</span>",
+				"today": "<span color='#f00'><b>{}</b></span>"
+			}
+		},
+		"actions": {
+			"on-click-right": "mode",
+			"on-click-forward": "tz_up",
+			"on-click-backward": "tz_down",
+			"on-scroll-up": "shift_up",
+			"on-scroll-down": "shift_down"
+		}
 	},
 	"pulseaudio": {
 		"scroll-step": 5, // %, can be a float
@@ -55,8 +68,8 @@
 		"format-source-muted": "",
 		"format-icons": {
 			"headphone": "",
-			"hands-free": "",
-			"headset": "",
+			"hands-free": "",
+			"headset": "",
 			"phone": "",
 			"portable": "",
 			"car": "",
@@ -71,11 +84,11 @@
 		"exec": "~/.config/waybar/widgets/backlight.sh",
 		"interval": 1,
 		"return-type": "json",
-		"format":"{percentage}% {text}",
-    "on-scroll-up": "brightnessctl set +5%",
-    "on-scroll-down": "brightnessctl set 5%-",
-    "on-click": "brightnessctl set 100%",
-    "on-click-right": "brightnessctl set 1%"
+		"format": "{percentage}% {text}",
+		"on-scroll-up": "brightnessctl set +5%",
+		"on-scroll-down": "brightnessctl set 5%-",
+		"on-click": "brightnessctl set 100%",
+		"on-click-right": "brightnessctl set 1%"
 	},
 	"custom/battery": {
 		"exec": "~/.config/waybar/widgets/battery.sh",
@@ -89,15 +102,15 @@
 		"on-click": "~/.config/waybar/scripts/wifi_menu.sh"
 	},
 	"custom/bluetooth": {
-    "exec": "~/.config/waybar/widgets/bluetooth.sh",
-    "interval": 2,
-    "return-type": "json",
-    "on-click": "blueman-manager"
+		"exec": "~/.config/waybar/widgets/bluetooth.sh",
+		"interval": 2,
+		"return-type": "json",
+		"on-click": "blueman-manager"
 	},
 	"custom/player": {
 		"exec": "~/.config/waybar/widgets/player.sh",
 		"interval": 2,
-		"return-type": "text",
+		"return-type": "json",
 		"on-click": "playerctl play-pause"
 	},
 	"custom/power": {

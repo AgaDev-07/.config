@@ -1,14 +1,6 @@
 #!/bin/bash
 
-# =========================
-# Dependencias requeridas
-# =========================
-require() {
-  if ! command -v "$1" &>/dev/null; then
-    echo "Error: falta '$1'" >&2
-    exit 1
-  fi
-}
+source "$HOME/.config/aga/lib/require.sh"
 
 require pkill
 require pgrep

@@ -1,14 +1,6 @@
 #!/bin/bash
 
-# =========================
-# Dependencias
-# =========================
-require() {
-  if ! command -v "$1" &>/dev/null; then
-    echo "Error: falta '$1'" >&2
-    exit 1
-  fi
-}
+source "$HOME/.config/aga/lib/require.sh"
 
 if [[ ! -d "/sys/class/net/wlp1s0" ]]; then
   exit 0
@@ -46,17 +38,17 @@ signal_icon() {
     ICON="🔗"
   else
     if [[ "$SECURITY" == WPA* || "$SECURITY" == WEP* ]]; then
-      if ((SIGNAL >= 80)); then ICON="󰤪"
-      elif ((SIGNAL >= 60)); then ICON="󰤧"
-      elif ((SIGNAL >= 40)); then ICON="󰤤"
-      elif ((SIGNAL >= 20)); then ICON="󰤡"
-      else ICON="󰤬"; fi
+      if ((SIGNAL >= 80)); then ICON+="󰤪"
+      elif ((SIGNAL >= 60)); then ICON+="󰤧"
+      elif ((SIGNAL >= 40)); then ICON+="󰤤"
+      elif ((SIGNAL >= 20)); then ICON+="󰤡"
+      else ICON+="󰤬"; fi
     else
-      if ((SIGNAL >= 80)); then ICON="󰤨"
-      elif ((SIGNAL >= 60)); then ICON="󰤥"
-      elif ((SIGNAL >= 40)); then ICON="󰤢"
-      elif ((SIGNAL >= 20)); then ICON="󰤟"
-      else ICON="󰤯"; fi
+      if ((SIGNAL >= 80)); then ICON+="󰤨"
+      elif ((SIGNAL >= 60)); then ICON+="󰤥"
+      elif ((SIGNAL >= 40)); then ICON+="󰤢"
+      elif ((SIGNAL >= 20)); then ICON+="󰤟"
+      else ICON+="󰤯"; fi
     fi
   fi
   echo "$ICON"

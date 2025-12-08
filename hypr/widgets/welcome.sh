@@ -1,13 +1,4 @@
 #!/bin/bash
-
-# Configuración
-THEME_CONF="/usr/share/sddm/themes/hypr-ely-neon/theme.conf"
-
-# =========================
-# Leer configuración de theme.conf
-# =========================
-read_conf() {
-  grep "^$1=" "$THEME_CONF" | cut -d'=' -f2 | tr -d '"'
-}
+source "$HOME/.config/aga/lib/read_conf.sh"
 
 echo $(read_conf "HeaderText")

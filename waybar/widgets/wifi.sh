@@ -2,15 +2,7 @@
 # Widget de red para Waybar
 # Requiere: nmcli, awk, ip
 
-# =========================
-# Dependencias
-# =========================
-require() {
-  if ! command -v "$1" &>/dev/null; then
-    echo "Error: falta '$1'" >&2
-    exit 1
-  fi
-}
+source "$HOME/.config/aga/lib/require.sh"
 
 if [[ ! -d "/sys/class/net/wlp1s0" && ! -d "/sys/class/net/enp0s31f6" ]]; then
   exit 0

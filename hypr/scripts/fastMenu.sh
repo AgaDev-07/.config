@@ -1,14 +1,6 @@
 #!/bin/bash
 
-# =========================
-# Dependencias obligatorias
-# =========================
-require() {
-  if ! command -v "$1" &>/dev/null; then
-    echo "Error: falta '$1'" >&2
-    exit 1
-  fi
-}
+source "$HOME/.config/aga/lib/require.sh"
 
 require wofi
 
@@ -63,7 +55,7 @@ get_cmd() {
   local desktop
   desktop=$(grep -Rl "^Name=${app}$" \
     /usr/share/applications \
-    ~/.local/share/applications \
+    $HOME/.local/share/applications \
     2>/dev/null | head -n 1)
 
   # Fallback a nombre en minúsculas
@@ -104,7 +96,7 @@ get_icon() {
   local desktop
   desktop=$(grep -Rl "^Name=${app}$" \
     /usr/share/applications \
-    ~/.local/share/applications \
+    $HOME/.local/share/applications \
     2>/dev/null | head -n 1)
 
   if [[ -n "$desktop" ]]; then

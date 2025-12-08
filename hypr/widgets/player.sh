@@ -1,5 +1,5 @@
 #!/bin/bash
-# Widget de música para Waybar
+# Widget de música para Hyprlock
 # Requiere: playerctl
 
 source "$HOME/.config/aga/lib/require.sh"
@@ -9,7 +9,7 @@ require playerctl
 # =========================
 # Configuración
 # =========================
-MAX_LENGTH=50
+MAX_LENGTH=30
 
 # Obtener lista de reproductores activos
 players=$(playerctl -l 2>/dev/null)
@@ -18,24 +18,7 @@ players=$(playerctl -l 2>/dev/null)
 # Usar el primer reproductor disponible
 player=$(echo "$players" | head -n1)
 title=$(playerctl metadata --player="$player" --format '{{ title }}' 2>/dev/null || echo '')
-o_title=$title
 artist=$(playerctl metadata --player="$player" --format '{{ artist }}' 2>/dev/null || echo '')
-
-# =========================
-# Elegir icono según reproductor
-# =========================
-case "$player" in
-  *spotify*) icon='' ;;
-  *brave*)
-    if [[ "$title" == *YouTube* ]] || [[ "$artist" == *YouTube* ]]; then
-      icon=''
-    else
-      icon=''
-    fi
-    ;;
-  *mpv*) icon='' ;;
-  *) icon='🎵' ;;
-esac
 
 # =========================
 # Recortar título largo sin cortar palabras
@@ -53,4 +36,5 @@ fi
 # =========================
 # Mostrar resultado
 # =========================
-echo "{\"text\": \"$icon  ${artist:+$artist: }$title\", \"tooltip\": \"$o_title\"}"
+echo "${artist:+$artist: }"
+echo "$title"

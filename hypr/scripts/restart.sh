@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source "$HOME/.config/aga/lib/require.sh"
+source "$HOME/.config/aga/lib/notification.sh"
 
 require hyprctl
 require notify-send
@@ -19,8 +20,7 @@ APPLICATION="Hyprland"
 CLASS=$(hyprctl activewindow 2>/dev/null | grep -m1 "class:" | sed 's/.*class: //')
 
 if [[ -z "$CLASS" ]]; then
-  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
-    "$APPLICATION" "No se detectó ninguna ventana activa."
+  send_notification critical "$APPLICATION" "$LOGO" "No se detectó ninguna ventana activa."
   exit 1
 fi
 
@@ -35,8 +35,7 @@ esac
 PID=$(pgrep -f "$CLASS" | head -n 1)
 
 if [[ -z "$PID" ]]; then
-  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
-    "$APPLICATION" "No se encontró ningún proceso asociado a '$CLASS'."
+  send_notification critical "$APPLICATION" "$LOGO" "No se encontró ningún proceso asociado a '$CLASS'."
   exit 1
 fi
 
@@ -46,30 +45,26 @@ fi
 CMD=$(ps -p "$PID" -o comm= | head -n 1)
 
 if [[ -z "$CMD" ]]; then
-  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
-    "$APPLICATION" "No se pudo obtener el comando del proceso '$CLASS'."
+  send_notification critical "$APPLICATION" "$LOGO" "No se pudo obtener el comando del proceso '$CLASS'."
   exit 1
 fi
 
 # Evitar reiniciar Hyprland o procesos críticos
 if [[ "$CMD" == "Hyprland" ]] || [[ "$CMD" == "systemd" ]] || [[ "$CMD" == "init" ]]; then
-  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
-    "$APPLICATION" "Por seguridad no se reiniciará el proceso '$CMD'."
+  send_notification critical "$APPLICATION" "$LOGO" "Por seguridad no se reiniciará el proceso '$CMD'."
   exit 1
 fi
 
 # Verificar si el comando existe antes de reiniciar
 if ! command -v "$CMD" &>/dev/null; then
-  notify-send -u critical -a "$APPLICATION" -i "$LOGO" \
-    "$APPLICATION" "El comando '$CMD' no es ejecutable o no existe en PATH."
+  send_notification critical "$APPLICATION" "$LOGO" "El comando '$CMD' no es ejecutable o no existe en PATH."
   exit 1
 fi
 
 # ======================================
 # Reinicio seguro
 # ======================================
-notify-send -u low -a "$APPLICATION" -i "$LOGO" \
-  "$APPLICATION" "Reiniciando $CMD… · $(date +'%H:%M:%S')"
+send_notification low "$APPLICATION" "$LOGO" "Reiniciando $CMD… · $(date +'%H:%M:%S')"
 
 kill "$PID" 2>/dev/null
 

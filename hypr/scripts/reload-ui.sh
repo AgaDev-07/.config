@@ -1,12 +1,18 @@
 #!/bin/bash
 
 source "$HOME/.config/aga/lib/require.sh"
+source "$HOME/.config/aga/lib/read_conf.sh"
 
 require pkill
 require pgrep
 require waybar
 require swaync
 require hyprctl
+require hyprpaper
+
+BACKGROUND="/usr/share/sddm/themes/hypr-ely-neon/$(read_conf "Background")"
+
+echo -e "preload = $BACKGROUND\nwallpaper = ,$BACKGROUND" > "$HOME/.config/hypr/hyprpaper.conf"
 
 # =========================
 # Función: matar procesos si existen
@@ -39,6 +45,9 @@ echo "Reiniciando Waybar y SwayNC…"
 
 kill_if_running "waybar"
 kill_if_running "swaync"
+
+kill_if_running "hyprpaper"
+start_if_not_running "hyprpaper"
 
 # Espera automática basada en carga → menos fallos
 sleep 0.3

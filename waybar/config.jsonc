@@ -99,7 +99,7 @@
 		"exec": "~/.config/waybar/widgets/wifi.sh",
 		"interval": 2,
 		"return-type": "json",
-		"on-click": "~/.config/waybar/scripts/wifi_menu.sh"
+		"on-click": "~/.config/waybar/menus/wifi.sh"
 	},
 	"custom/bluetooth": {
 		"exec": "~/.config/waybar/widgets/bluetooth.sh",
@@ -115,6 +115,6 @@
 	},
 	"custom/power": {
 		"format": "󰣇",
-		"on-click": "~/.config/waybar/scripts/power_menu.sh"
+		"on-click": "~/.config/waybar/menus/power.sh"
 	}
 }

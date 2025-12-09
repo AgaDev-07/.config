@@ -18,7 +18,7 @@ window#waybar {
 .modules-left {
 	margin-top: 10px;
 	margin-left: 10px;
-	background: @background-alt;
+	background: @background;
 	padding-right: 10px;
 	border: 2px solid @border;
 	border-radius: 20px;
@@ -60,7 +60,7 @@ window#waybar {
 #custom-player {
 	margin: 0 25px;
 	padding: 0 10px;
-	background: @background-alt;
+	background: @background;
 	border: 2px solid @border;
 	border-radius: 20px;
 }
@@ -68,7 +68,7 @@ window#waybar {
 .modules-right {
 	margin-top: 10px;
 	margin-right: 10px;
-	background: @background-alt;
+	background: @background;
 	padding: 0 15px 0 15px;
 	border: 2px solid @border;
 	border-radius: 20px;

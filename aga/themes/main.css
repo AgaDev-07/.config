@@ -1,18 +1,2 @@
-@define-color base-bg    black;
-@define-color base       whitesmoke;
-
-@define-color foreground    @base;
-@define-color subtext0      @base;
-@define-color subtext1      @base;
-
-@define-color surface0    alpha(@base-bg, .3);
-@define-color surface1    alpha(@base, .3);
-@define-color surface2    alpha(@base, .5);
-
-@define-color switch-slider     @base;
-@define-color border            @base;
-
-@define-color background-alt    alpha(@base-bg, .4);
-@define-color background        alpha(@base-bg, .7);
-
+@import '_.css';
 @import 'red.css';

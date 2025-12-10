@@ -3,7 +3,12 @@
 # ===================================
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
+
+# ===================================
+# 🔍 Variables de entorno
+# ===================================
 MINECRAFT="$HOME/.var/app/com.mcpelauncher.MCPELauncher/data/mcpelauncher/games/com.mojang"
+PATH="$HOME/.local/bin:$PATH"
 
 # Corrección automática de comandos
 ENABLE_CORRECTION="true"
@@ -18,6 +23,7 @@ plugins=(
   extract
   web-search
 )
+autoload -Uz compinit && compinit
 source $ZSH/oh-my-zsh.sh
 
 # ===================================
@@ -119,13 +125,6 @@ alias brave-browser='brave'
 alias clear='clear && printf "\e[3J"'
 
 # ===================================
-# 🧰 Paths y variables de entorno
-# ===================================
-
-
-# ===================================
 # 🧩 Completions
 # ===================================
 fpath=(~/.zsh/completions $fpath)
-autoload -Uz compinit && compinit
-. "/home/aga/.deno/env"

@@ -27,21 +27,16 @@ setopt prompt_subst  # Permite ejecutar funciones dentro del prompt
 
 # Icono de carpeta o home
 function dir_icon {
-  if [[ "$PWD" == "$HOME" ]]; then
-    echo 
-  elif [[ "$PWD" == "$HOME/.config" ]]; then
-    echo 
-  elif [[ "$PWD" == "$HOME/Downloads" ]]; then
-    echo 
-  elif [[ "$PWD" == "$HOME/Pictures" ]]; then
-    echo 󰉏
-  elif [[ "$PWD" == "$MINECRAFT"* ]]; then
-    echo 󰍳
-  elif git rev-parse --is-inside-work-tree &>/dev/null; then
-    echo 󰊢
-  else
-    echo 
-  fi
+  case "$PWD" in
+    "$HOME") echo  ;;
+    "$HOME/.config") echo  ;;
+    "$HOME/Downloads") echo  ;;
+    "$HOME/Pictures") echo 󰉏 ;;
+    "$MINECRAFT"*) echo 󰍳 ;;
+    *)
+      git rev-parse --is-inside-work-tree &>/dev/null && echo 󰊢 || echo 
+    ;;
+  esac
 }
 function parse_git_branch() {
   local branch dirty staged untracked ahead behind diverged status

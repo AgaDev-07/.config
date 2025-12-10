@@ -14,7 +14,7 @@ chosen=$(printf "%s" "$options" | wofi \
   -l 1 -L 4 -x 10 -y 10 -W 20%)
 
 case "$chosen" in
-  *Bloquear*) "$HOME/.config/hypr/scripts/lock.sh" ;;
+  *Bloquear*) "$HOME/.config/aga/scripts/lock.sh" ;;
   *Cerrar\ sesión*) hyprctl dispatch exit ;;
   *Reiniciar*) systemctl reboot ;;
   *Apagar*) systemctl poweroff ;;

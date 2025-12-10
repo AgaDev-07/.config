@@ -115,6 +115,6 @@
 	},
 	"custom/power": {
 		"format": "󰣇",
-		"on-click": "~/.config/waybar/menus/power.sh"
+		"on-click": "~/.config/aga/menus/power.sh"
 	}
 }

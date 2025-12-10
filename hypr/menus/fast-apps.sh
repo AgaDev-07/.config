@@ -161,12 +161,19 @@ done <<< "$APPS"
 # =========================
 # Mostrar menú
 # =========================
-chosen=$(echo -e "$formatted" | wofi \
+items=$(echo -e "$formatted")
+lines=$(echo "$items" | wc -l)
+
+if [[ $lines -ge 8 ]]; then lines=8
+fi
+
+chosen=$(echo "$items" | wofi \
   --show dmenu \
   --allow-images \
   --hide-search \
   --prompt "" \
-  --location=center)
+  --location=center \
+  -L $lines)
 
 [ -z "$chosen" ] && exit 0
 

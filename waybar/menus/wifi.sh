@@ -22,7 +22,7 @@ if [[ -z "$IFACE" ]]; then
   exit 1
 fi
 
-CURRENT_SSID=$(nmcli -t -f ACTIVE,SSID dev wifi | grep '^yes:' | cut -d: -f2)
+CURRENT_SSID=$(nmcli -t -f ACTIVE,SSID dev wifi | grep '^sí:' | cut -d: -f2)
 
 # =========================
 # Función para asignar icono según intensidad y seguridad
@@ -35,21 +35,23 @@ signal_icon() {
 
   # Red actualmente conectada
   if [[ "$SSID" == "$CURRENT_SSID" ]]; then
-    ICON="🔗"
+    if ((SIGNAL >= 80)); then ICON+="󱛎"
+    elif ((SIGNAL >= 60)); then ICON+="󱛍"
+    elif ((SIGNAL >= 40)); then ICON+="󱛌"
+    elif ((SIGNAL >= 20)); then ICON+="󱛋"
+    else ICON+="󱛏"; fi
+  elif [[ "$SECURITY" == WPA* || "$SECURITY" == WEP* ]]; then
+    if ((SIGNAL >= 80)); then ICON+="󰤪"
+    elif ((SIGNAL >= 60)); then ICON+="󰤧"
+    elif ((SIGNAL >= 40)); then ICON+="󰤤"
+    elif ((SIGNAL >= 20)); then ICON+="󰤡"
+    else ICON+="󰤬"; fi
   else
-    if [[ "$SECURITY" == WPA* || "$SECURITY" == WEP* ]]; then
-      if ((SIGNAL >= 80)); then ICON+="󰤪"
-      elif ((SIGNAL >= 60)); then ICON+="󰤧"
-      elif ((SIGNAL >= 40)); then ICON+="󰤤"
-      elif ((SIGNAL >= 20)); then ICON+="󰤡"
-      else ICON+="󰤬"; fi
-    else
-      if ((SIGNAL >= 80)); then ICON+="󰤨"
-      elif ((SIGNAL >= 60)); then ICON+="󰤥"
-      elif ((SIGNAL >= 40)); then ICON+="󰤢"
-      elif ((SIGNAL >= 20)); then ICON+="󰤟"
-      else ICON+="󰤯"; fi
-    fi
+    if ((SIGNAL >= 80)); then ICON+="󰤨"
+    elif ((SIGNAL >= 60)); then ICON+="󰤥"
+    elif ((SIGNAL >= 40)); then ICON+="󰤢"
+    elif ((SIGNAL >= 20)); then ICON+="󰤟"
+    else ICON+="󰤯"; fi
   fi
   echo "$ICON"
 }
@@ -63,7 +65,7 @@ NETWORKS=$(nmcli -t -f SSID,SIGNAL,SECURITY dev wifi | grep -v '^:$' \
   | while IFS=: read -r SSID SIGNAL SECURITY; do
     [[ -z "$SSID" ]] && continue
     ICON=$(signal_icon "$SSID" "$SIGNAL" "$SECURITY")
-    echo "$ICON $SSID"
+    echo "$ICON  $SSID"
   done
 )
 

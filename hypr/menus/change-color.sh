@@ -67,7 +67,13 @@ set_theme() {
 # =========================
 #  Lógica principal
 # =========================
-SELECTED=$(list_themes | wofi --dmenu --hide-search --prompt "")
+items=$(list_themes)
+lines=$(echo "$items" | wc -l)
+
+if [[ $lines -ge 8 ]]; then lines=8
+fi
+
+SELECTED=$(echo "$items" | wofi --dmenu --hide-search --prompt "" -L $lines -W 20%)
 [[ -z "$SELECTED" ]] && exit 0
 
 set_theme "$SELECTED"

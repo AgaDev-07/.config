@@ -3,6 +3,7 @@
 # ===================================
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
+MINECRAFT="$HOME/.var/app/com.mcpelauncher.MCPELauncher/data/mcpelauncher/games/com.mojang"
 
 # Corrección automática de comandos
 ENABLE_CORRECTION="true"
@@ -27,9 +28,19 @@ setopt prompt_subst  # Permite ejecutar funciones dentro del prompt
 # Icono de carpeta o home
 function dir_icon {
   if [[ "$PWD" == "$HOME" ]]; then
-    echo "%{%B%F{white}%}%{%f%b%}"
+    echo 
+  elif [[ "$PWD" == "$HOME/.config" ]]; then
+    echo 
+  elif [[ "$PWD" == "$HOME/Downloads" ]]; then
+    echo 
+  elif [[ "$PWD" == "$HOME/Pictures" ]]; then
+    echo 󰉏
+  elif [[ "$PWD" == "$MINECRAFT"* ]]; then
+    echo 󰍳
+  elif git rev-parse --is-inside-work-tree &>/dev/null; then
+    echo 󰊢
   else
-    echo "%{%B%F{cyan}%}%{%f%b%}"
+    echo 
   fi
 }
 function parse_git_branch() {
@@ -61,14 +72,14 @@ function parse_git_branch() {
 
   # Retorno final
   if [ -n "$git_status" ]; then
-    echo " [$branch $git_status]"
+    echo "[$branch $git_status] "
   else
-    echo " [$branch]"
+    echo "[$branch] "
   fi
 }
 
 # Prompt final
-PROMPT='%F{cyan}󰣇 %f %F{magenta}%n%f $(dir_icon) %F{red}%~%f %F{yellow}$(parse_git_branch)%f %(?.%B%F{green}.%F{red})%f%b '
+PROMPT='%F{cyan}󰣇 %f %F{magenta}%n%f %{%B%F{cyan}%}$(dir_icon)%{%f%b%} %F{red}%~%f %F{yellow}$(parse_git_branch)%f%(?.%B%F{green}.%F{red})%f%b '
 
 # ===================================
 # 🔍 Variables de entorno

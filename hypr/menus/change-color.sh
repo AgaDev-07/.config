@@ -61,7 +61,7 @@ set_theme() {
   
   echo -e "@import '_.css';\n@import '$THEME_NAME.css';" > "$HOME/.config/aga/themes/main.css"
   echo -e "general {\ncol.active_border = $color_rgb\n}" > "$HOME/.config/hypr/modules/ui/color.conf"
-  "$HOME/.config/hypr/scripts/reload-ui.sh"
+  "$HOME/.config/aga/scripts/reload-ui.sh"
 }
 
 # =========================

@@ -1,38 +1,46 @@
 @import '.config/aga/themes/main.css';
 
 window {
-    border-radius: 10px;
-    border: 2px solid @border;
-    background-color: @background;
+  border-radius: 10px;
+  border: 2px solid @border;
+  background-color: @background;
 }
 
 /* Cada app será un bloque que Wofi acomodará solo */
 #entry {
-    padding: 10px;
-    margin: 0 2px;
-    background: transparent;
-    border-radius: 8px;
+  padding: 10px;
+  margin: 0 2px;
+  background: transparent;
+  border-radius: 8px;
 }
 #entry:nth-child(even){
-    background: @background-alt;
+  background: @background-alt;
 }
 #entry:selected {
-    background: @hover;
+  background: @hover;
 }
 #entry:first-child {
-    margin-top: 2px;
+  margin-top: 2px;
 }
 #entry:last-child {
-    margin-bottom: 2px;
+  margin-bottom: 2px;
 }
 
 /* Icono */
 #img {
-    font-size: 42px;
-    margin-bottom: 6px;
+  font-size: 42px;
+  margin-bottom: 2px;
 }
 
 /* Texto */
 #text {
-    font-size: 13px;
+  font-size: 13px;
+}
+
+#input {
+  background: transparent;
+  border-radius: 0;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  border: 2px solid red;
 }

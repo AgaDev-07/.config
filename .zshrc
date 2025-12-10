@@ -38,34 +38,41 @@ function dir_icon {
     ;;
   esac
 }
-function parse_git_branch() {
-  local branch dirty staged untracked ahead behind diverged status
-
-  # Detectar si estamos dentro de un repo
+parse_git_branch() {
+  # Si no es repo, salir
   git rev-parse --is-inside-work-tree &>/dev/null || return
 
-  # Rama o commit si detached
-  branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+  # Obtiene todo en un solo comando
+  local raw_status
+  raw_status=$(git status --porcelain=2 --branch 2>/dev/null)
 
-  # Estado del repositorio
-  staged=$(git diff --cached --quiet || echo "+")
-  dirty=$(git diff --quiet || echo "!")
-  untracked=$(git ls-files --others --exclude-standard | grep -q . && echo "?")
+  # Extraer rama o HEAD
+  local branch
+  branch=$(echo "$raw_status" | awk '/^# branch.head/ {print $3}')
+  [[ "$branch" == "(detached)" ]] && branch=$(git rev-parse --short HEAD)
 
-  # Adelantado o atrasado
-  ahead=$(git rev-list --count @{u}..HEAD 2>/dev/null)
-  behind=$(git rev-list --count HEAD..@{u} 2>/dev/null)
+  # Adelantado / atrasado
+  local ahead behind
+  ahead=$(echo "$raw_status" | awk '/^# branch.ab/ {print $3}' | sed 's/+//')
+  behind=$(echo "$raw_status" | awk '/^# branch.ab/ {print $4}' | sed 's/-//')
 
-  [[ "$ahead" -gt 0 && "$behind" -gt 0 ]] && diverged="⇕" \
-    || [[ "$ahead" -gt 0 ]] && ahead="⇡${ahead}" \
-    || ahead=""
+  local ahead_icon behind_icon diverged_icon
+  if [[ "$ahead" -gt 0 && "$behind" -gt 0 ]]; then
+    diverged_icon="⇕"
+  else
+    [[ "$ahead" -gt 0 ]] && ahead_icon="⇡$ahead"
+    [[ "$behind" -gt 0 ]] && behind_icon="⇣$behind"
+  fi
 
-  [[ "$behind" -gt 0 && -z "$diverged" ]] && behind="⇣${behind}" \
-    || behind=""
+  # Estados del working tree (staged, modified, untracked)
+  local staged dirty untracked
 
-  git_status="$staged$dirty$untracked$diverged$ahead$behind"
+  echo "$raw_status" | grep -q "^1 " && dirty="!"
+  echo "$raw_status" | grep -q "^2 " && staged="+"
+  echo "$raw_status" | grep -q "^? " && untracked="?"
 
-  # Retorno final
+  local git_status="$staged$dirty$untracked$diverged_icon$ahead_icon$behind_icon"
+
   if [ -n "$git_status" ]; then
     echo "[$branch $git_status] "
   else

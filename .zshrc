@@ -82,14 +82,6 @@ function parse_git_branch() {
 PROMPT='%F{cyan}󰣇 %f %F{magenta}%n%f %{%B%F{cyan}%}$(dir_icon)%{%f%b%} %F{red}%~%f %F{yellow}$(parse_git_branch)%f%(?.%B%F{green}.%F{red})%f%b '
 
 # ===================================
-# 🔍 Variables de entorno
-# ===================================
-export XCURSOR_THEME=RedCursor
-export XCURSOR_SIZE=24
-export GTK_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
-
-# ===================================
 # 🔍 Colores y resaltado
 # ===================================
 ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#FF4C70,bold'

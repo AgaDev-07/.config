@@ -46,7 +46,7 @@ get_cmd() {
 
   case "$app" in
     "Minecraft")
-      echo "flatpak run com.mcpelauncher.MCPELauncher"
+      echo "flatpak run com.trench.trinity.launcher"
       return
     ;;
   esac

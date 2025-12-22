@@ -1,5 +1,7 @@
 #!/bin/bash
 source "$HOME/.config/aga/lib/require.sh"
+require notify-send
+require paplay
 send_notification() {
   SOUND=dialog-information
   [[ "$1" == "critical" ]] && SOUND=dialog-error

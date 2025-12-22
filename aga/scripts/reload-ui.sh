@@ -46,8 +46,11 @@ echo "Reiniciando Waybar y SwayNC…"
 kill_if_running "waybar"
 kill_if_running "swaync"
 
+gsettings set org.gnome.desktop.interface gtk-theme "Adwaita"
+
 # Espera automática basada en carga → menos fallos
-sleep 0.3
+sleep 0.2
+gsettings set org.gnome.desktop.interface gtk-theme "aga"
 
 # Lanzamiento robusto
 start_if_not_running "waybar"

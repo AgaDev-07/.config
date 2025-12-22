@@ -57,6 +57,7 @@ fi
 
 # Verificar si el comando existe antes de reiniciar
 if ! command -v "$CMD" &>/dev/null; then
+  echo "$CMD"
   send_notification critical "$APPLICATION" "$LOGO" "El comando '$CMD' no es ejecutable o no existe en PATH."
   exit 1
 fi
@@ -65,7 +66,6 @@ fi
 # Reinicio seguro
 # ======================================
 send_notification low "$APPLICATION" "$LOGO" "Reiniciando $CMD… · $(date +'%H:%M:%S')"
-
 kill "$PID" 2>/dev/null
 
 sleep 0.4

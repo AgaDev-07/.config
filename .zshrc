@@ -8,6 +8,7 @@ ZSH_THEME=""
 # 🔍 Variables de entorno
 # ===================================
 MINECRAFT="$HOME/.var/app/com.mcpelauncher.MCPELauncher/data/mcpelauncher/games/com.mojang"
+LAUNCHER="$HOME/.var/app/com.trench.trinity.launcher/data/mcpelauncher/games/com.mojang"
 PATH="$HOME/.local/bin:$PATH"
 
 # Corrección automática de comandos

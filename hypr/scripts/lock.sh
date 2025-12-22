@@ -14,7 +14,7 @@ set -e
 IMAGES_DIR="$HOME/.config/hypr/images"
 OUTPUT="$IMAGES_DIR/background.png"
 STATIC="$IMAGES_DIR/background_static.png"
-USE_SCREENSHOT="true"
+USE_SCREENSHOT="false"
 
 mkdir -p "$IMAGES_DIR"
 
@@ -45,7 +45,6 @@ OVERLAY_OPACITY=$(read_conf "DimBackgroundImage")
 SCALE_IMAGE=$(read_conf "ScaleImageCropped")
 BG_ALIGN_H=$(read_conf "BackgroundImageHAlignment")
 BG_ALIGN_V=$(read_conf "BackgroundImageVAlignment")
-BACKGROUND="/usr/share/sddm/themes/hypr-ely-neon/$(read_conf "Background")"
 
 # =========================
 # Alineación de fondo
@@ -78,10 +77,9 @@ fi
 if [[ "$USE_SCREENSHOT" == "true" ]]; then
   CMD="grim -g \"0,0 ${SCREEN_W}x${SCREEN_H}\" - | magick - -blur 0x10"
 else
-  resize_flag="-resize ${SCREEN_W}x${SCREEN_H}^"
-  [[ "$SCALE_IMAGE" != "true" ]] && resize_flag="-resize ${SCREEN_W}x${SCREEN_H}"
+  BACKGROUND="/usr/share/sddm/themes/hypr-ely-neon/$(read_conf "Background")"
 
-  CMD="magick \"$BACKGROUND\" \( +clone $resize_flag -gravity \"$GRAVITY\" -extent ${SCREEN_W}x${SCREEN_H} \)"
+  CMD="magick \"$BACKGROUND\" \( +clone -resize ${SCREEN_W}x${SCREEN_H}^ -gravity \"$GRAVITY\" -extent ${SCREEN_W}x${SCREEN_H} \)"
 fi
 
 # =========================

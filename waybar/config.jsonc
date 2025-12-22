@@ -77,8 +77,8 @@
 		},
 		"tooltip-format": "{format_source}: {source_volume}%\n{icon}: {volume}%",
 		"on-click": "pavucontrol",
-		"on-click-middle": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
-		"on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+		"on-click-middle": "wpctl set-source-mute @DEFAULT_SOURCE@ toggle",
+		"on-click-right": "wpctl set-sink-mute @DEFAULT_SINK@ toggle"
 	},
 	"custom/backlight": {
 		"exec": "~/.config/waybar/widgets/backlight.sh",

@@ -30,11 +30,13 @@ window {
 #img {
   font-size: 42px;
   margin-bottom: 2px;
+  background: transparent;
 }
 
 /* Texto */
 #text {
   font-size: 13px;
+  background: transparent;
 }
 
 #input {

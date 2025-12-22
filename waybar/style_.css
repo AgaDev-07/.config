@@ -1,0 +1,83 @@
+* {
+	/* `otf-font-awesome` is required to be installed for icons */
+	font-family: 'Symbols Nerd Font', Roboto, Helvetica, Arial, sans-serif;
+}
+
+window#waybar {
+	background-color: transparent;
+	color: @foreground;
+	transition-property: background-color;
+	transition-duration: 0.5s;
+	padding: 10px;
+	margin-bottom: 0;
+}
+
+.modules-left, .modules-right, .modules-center {
+	margin-top: 10px;
+	background: transparent;
+	border: none;
+}
+.modules-left {
+	margin-left: 10px;
+}
+.modules-right {
+	margin-right: 10px;
+}
+
+#window {
+	font-weight: bolder;
+	background-color: rgb(65, 65, 65);
+	border-radius: 20px;
+	padding: 0 7px;
+}
+#network {
+	background-color: rgb(65, 65, 65);
+	border-radius: 20px;
+	padding: 0 1.3em;
+}
+#custom-sandbox {
+	background-color: rgb(65, 65, 65);
+	border-radius: 20px;
+	padding: 0 1.5em;
+}
+
+
+#workspaces {
+	background-color: rgb(65, 65, 65);
+	border-radius: 20px;
+	padding: 0 2.5em;
+}
+#workspaces button {
+	font-size: .6em;
+	padding: 0;
+	background-color: transparent;
+	color: white;
+	font-weight: bolder;
+}
+#workspaces button:hover {
+	color: rgb(255, 255, 140);
+	background: transparent;
+	box-shadow: none;
+	border-color: transparent;
+}
+#workspaces button.active {
+	background: transparent;
+	color: rgb(255, 59, 59);
+	border-color: transparent;
+	padding: 0;
+	border-radius: 20px;
+}
+
+
+#custom-external {
+	background-color: rgb(65, 65, 65);
+	border-radius: 20px;
+	padding: 0 2em;
+}
+#custom-power {
+	background-color: rgb(65, 65, 65);
+	font-size: .7em;
+	border-radius: 20px;
+	padding: 0 10px;
+	color: #09f;
+}

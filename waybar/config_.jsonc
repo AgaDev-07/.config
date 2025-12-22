@@ -1,0 +1,54 @@
+// -*- mode: jsonc -*-
+{
+	// "layer": "top", // Waybar at top layer
+	// "position": "bottom", // Waybar position (top|bottom|left|right)
+	// "height": 15, // Waybar height (to be removed for auto height)
+	// "width": 1280, // Waybar width
+	"spacing": 4, // Gaps between modules (4px)
+	// Choose the order of the modules
+	"modules-left": ["hyprland/window", "network", "custom/sandbox"],
+	"modules-center": ["hyprland/workspaces"],
+	"modules-right": ["custom/external", "custom/power"],
+	"hyprland/window": {
+		"format": "",
+		"icon": true,
+		"icon-size": 15
+	},
+	"network": {
+		"format": "{ipaddr}",
+		"format-wifi": "<span color='#09f'>󰖩 </span>{ipaddr}",
+		"format-ethernet": "<span color='#09f'>󰈀 </span>{ipaddr}"
+	},
+	"custom/sandbox": {
+		"format": "<span color='#1c1'> </span>10.10.16.38"
+	},
+
+	// Modules configuration
+	"hyprland/workspaces": {
+		"all-outputs": true,
+		"format": "{icon}",
+		"format-icons": {
+			"1": "",
+			"2": "",
+			"3": "",
+			"4": "",
+			"5": "",
+			"6": "",
+			"7": "",
+			"8": "",
+			"9": "",
+			"10": ""
+		},
+		"persistent-workspaces": {
+			"*": 10
+		}
+	},
+
+	"custom/external": {
+		"format": "<span color='#f00'>󰕖 </span>BabyTwo - 10.129.134.72"
+	},
+	"custom/power": {
+		"format": "⏻",
+		"on-click": "~/.config/aga/menus/power.sh"
+	}
+}

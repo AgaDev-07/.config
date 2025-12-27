@@ -11,6 +11,32 @@ require playerctl
 # =========================
 MAX_LENGTH=50
 
+parse_anime() {
+  if echo "$title" | grep -qiE '\|[[:space:]]*veranime\.top$'; then
+    # Quitar símbolo inicial
+    CLEAN=$(echo "$title" | sed 's/^▷[[:space:]]*//')
+
+    # Serie (sin Cap ni Season)
+    title=$(echo "$CLEAN" | sed -E 's/(Cap[[:space:]]+[0-9]+).*//; s/[0-9]+(st|nd|rd|th)[[:space:]]+Season//I' | xargs)
+
+    # Capítulo
+    CAP=$(echo "$CLEAN" | grep -oE 'Cap[[:space:]]+[0-9]+' | grep -oE '[0-9]+')
+
+    # Temporada (opcional)
+    SEASON=$(echo "$CLEAN" | grep -oiE '[0-9]+(st|nd|rd|th)[[:space:]]+Season' \
+      | sed -E 's/[^0-9]//g')
+
+    icon=⛩
+    if [[ -n "$SEASON" ]]; then
+      artist=$(echo "T$SEASON EP $CAP")
+      tooltip=$(echo "$title\\nTemporada $SEASON\\nEpisodio $CAP")
+    else
+      artist=$(echo "EP $CAP")
+      tooltip=$(echo "$title\\nEpisodio $CAP")
+    fi
+  fi
+}
+
 # Obtener lista de reproductores activos
 players=$(playerctl -l 2>/dev/null)
 [[ -z "$players" ]] && exit 0
@@ -18,7 +44,7 @@ players=$(playerctl -l 2>/dev/null)
 # Usar el primer reproductor disponible
 player=$(echo "$players" | head -n1)
 title=$(playerctl metadata --player="$player" --format '{{ title }}' 2>/dev/null || echo '')
-o_title=$title
+tooltip=$title
 artist=$(playerctl metadata --player="$player" --format '{{ artist }}' 2>/dev/null || echo '')
 
 # =========================
@@ -37,6 +63,8 @@ case "$player" in
   *) icon='🎵' ;;
 esac
 
+parse_anime
+
 # =========================
 # Recortar título largo sin cortar palabras
 # =========================
@@ -53,4 +81,4 @@ fi
 # =========================
 # Mostrar resultado
 # =========================
-echo "{\"text\": \"$icon  ${artist:+$artist: }$title\", \"tooltip\": \"$o_title\"}"
+echo "{\"text\": \"$icon  ${artist:+$artist: }$title\", \"tooltip\": \"$tooltip\"}"

@@ -67,18 +67,12 @@
 		"format-source": "",
 		"format-source-muted": "",
 		"format-icons": {
-			"headphone": "",
-			"hands-free": "",
-			"headset": "",
-			"phone": "",
-			"portable": "",
-			"car": "",
 			"default": ["", "", ""]
 		},
 		"tooltip-format": "{format_source}: {source_volume}%\n{icon}: {volume}%",
 		"on-click": "pavucontrol",
-		"on-click-middle": "wpctl set-source-mute @DEFAULT_SOURCE@ toggle",
-		"on-click-right": "wpctl set-sink-mute @DEFAULT_SINK@ toggle"
+		"on-click-middle": "wpctl set-mute @DEFAULT_SOURCE@ toggle",
+		"on-click-right": "wpctl set-mute @DEFAULT_SINK@ toggle"
 	},
 	"custom/backlight": {
 		"exec": "~/.config/waybar/widgets/backlight.sh",

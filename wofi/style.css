@@ -17,7 +17,7 @@ window {
   background: @background-alt;
 }
 #entry:selected {
-  background: @hover;
+  background: alpha(@hover, 0.3);
 }
 #entry:first-child {
   margin-top: 2px;

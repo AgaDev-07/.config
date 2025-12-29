@@ -35,6 +35,29 @@ parse_anime() {
       tooltip=$(echo "$title\\nEpisodio $CAP")
     fi
   fi
+  if echo "$title" | grep -qiE '\-[[:space:]]*animeflv$'; then
+    # Quitar símbolo inicial
+    CLEAN=$title
+
+    # Serie (sin Cap ni Season)
+    title=$(echo "$CLEAN" | sed -E 's/(Episodio[[:space:]]+[0-9]+).*//; s/[0-9]+(st|nd|rd|th)[[:space:]]+Season//I' | xargs)
+
+    # Capítulo
+    CAP=$(echo "$CLEAN" | grep -oE 'Episodio[[:space:]]+[0-9]+' | grep -oE '[0-9]+')
+
+    # Temporada (opcional)
+    SEASON=$(echo "$CLEAN" | grep -oiE '[0-9]+(st|nd|rd|th)[[:space:]]+Season' \
+      | sed -E 's/[^0-9]//g')
+
+    icon=⛩
+    if [[ -n "$SEASON" ]]; then
+      artist=$(echo "T$SEASON EP $CAP")
+      tooltip=$(echo "$title\\nTemporada $SEASON\\nEpisodio $CAP")
+    else
+      artist=$(echo "EP $CAP")
+      tooltip=$(echo "$title\\nEpisodio $CAP")
+    fi
+  fi
 }
 
 # Obtener lista de reproductores activos

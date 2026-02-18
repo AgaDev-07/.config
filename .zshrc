@@ -10,6 +10,10 @@ ZSH_THEME=""
 MINECRAFT="$HOME/.var/app/com.mcpelauncher.MCPELauncher/data/mcpelauncher/games/com.mojang"
 LAUNCHER="$HOME/.var/app/com.trench.trinity.launcher/data/mcpelauncher/games/com.mojang"
 PATH="$HOME/.local/bin:$PATH"
+# XDG
+export XDG_DOCUMENTS_DIR="$HOME/Documents"
+export XDG_DOWNLOADS_DIR="$HOME/Downloads"
+export XDG_PICTURES_DIR="$HOME/Pictures"
 
 # Corrección automática de comandos
 ENABLE_CORRECTION="true"
@@ -37,8 +41,8 @@ function dir_icon {
   case "$PWD" in
     "$HOME") echo  ;;
     "$HOME/.config") echo  ;;
-    "$HOME/Downloads") echo  ;;
-    "$HOME/Pictures") echo 󰉏 ;;
+    "$XDG_DOWNLOADS_DIR") echo  ;;
+    "$XDG_PICTURES_DIR") echo 󰉏 ;;
     "$MINECRAFT"*) echo 󰍳 ;;
     *)
       git rev-parse --is-inside-work-tree &>/dev/null && echo 󰊢 || echo 
@@ -93,12 +97,12 @@ PROMPT='%F{cyan}󰣇 %f %F{magenta}%n%f %{%B%F{cyan}%}$(dir_icon)%{%f%b%} %F{red
 # ===================================
 # 🔍 Colores y resaltado
 # ===================================
-ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#FF4C70,bold'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=red,bold'
 ZSH_HIGHLIGHT_STYLES[bad-command]='fg=red,bold'
-ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#00AAFF,bold'
-ZSH_HIGHLIGHT_STYLES[command]='fg=#00F5CE,bold'
-ZSH_HIGHLIGHT_STYLES[alias]='fg=#00F5CE,bold'
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=#00F5CE,bold'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=blue,bold'
+ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
+ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
 
 # ===================================
 # 🧾 Historial persistente
@@ -121,6 +125,7 @@ alias uninstall='sudo pacman -Rns'
 alias installu='sudo pacman -U'
 alias update='sudo pacman -Syu'
 alias brave-browser='brave'
+alias dra='deno run -A'
 
 # Este alias borra pantalla y scrollback
 alias clear='clear && printf "\e[3J"'

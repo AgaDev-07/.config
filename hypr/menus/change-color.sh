@@ -1,9 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+exec > /tmp/theme-bind.log 2>&1
+set -e
+set -x
 
 source "$HOME/.config/aga/lib/color.sh"
 
 THEMES_DIR="$HOME/.config/aga/themes"
-
 
 # =========================
 # Change VSCode color
@@ -22,7 +25,7 @@ get_color() {
   local file="$1"
   local color="$2"
   [[ -z color ]] && color=base
-  grep "@define-color $color" "$file" \
+  grep "@define-color $color" "$file/main.css" \
     | sed -E "s/.*$color[[:space:]]+([^;]+);/\1/" \
     | head -n 1
 }
@@ -31,14 +34,13 @@ get_color() {
 # Make list "theme (color)"
 # =========================
 list_themes() {
-  for f in "$THEMES_DIR"/*.css; do
+  for f in "$THEMES_DIR"/*; do
     base="$(basename "$f")"
     [[ "$base" == "_.css" ]] && continue
     [[ "$base" == "main.css" ]] && continue
 
     color=$(get_color "$f")
-    name_no_ext="${base%.css}"
-    echo "$name_no_ext ($color)"
+    echo "$base ($color)"
   done
 }
 
@@ -47,8 +49,8 @@ list_themes() {
 # =========================
 set_theme() {
   THEME_NAME=$(echo "$1" | sed -E 's/^(.*) \(.+\)$/\1/')
-  THEME_FILE="$THEMES_DIR/$THEME_NAME.css"
-  color=$(get_color "$THEME_FILE")
+  THEME_DIR="$THEMES_DIR/$THEME_NAME"
+  color=$(get_color "$THEME_DIR")
   color_rgb=$(to_rgb "$color")
   color_hex=$(to_hex "$color")
 
@@ -57,11 +59,18 @@ set_theme() {
   change-code-color "activeBorder" "$color_hex"
   change-code-color "activeFocusBorder" "$color_hex"
   change-code-color "activeBackground" "$(hex_add_alpha "$color_hex" "4" | to_hex)"
-  change-code-color "inactiveForeground" "$(get_color "$THEME_FILE" "hover" | to_hex)"
+  change-code-color "inactiveForeground" "$(get_color "$THEME_DIR" "hover" | to_hex)"
   
-  echo -e "@import '_.css';\n@import '$THEME_NAME.css';" > "$HOME/.config/aga/themes/main.css"
+  echo -e "@import '_.css';\n@import '$THEME_NAME/main.css';" > "$HOME/.config/aga/themes/main.css"
   echo -e "general {\ncol.active_border = $color_rgb\n}" > "$HOME/.config/hypr/modules/ui/color.conf"
-  "$HOME/.config/aga/scripts/reload-ui.sh"
+  "$HOME/.config/aga/scripts/reload-ui.sh" &
+  swww img "$THEME_DIR/wallpaper" --transition-type outer --transition-duration 0.7
+
+  # ---------- Kitty colors (SIN socket) ----------
+  if [[ -f "$THEME_DIR/kitty.conf" ]]; then
+    ln -sf "$THEME_DIR/kitty.conf" "$HOME/.config/kitty/colors.conf"
+    killall -SIGUSR1 kitty || true
+  fi
 }
 
 # =========================

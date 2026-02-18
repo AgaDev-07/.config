@@ -151,10 +151,9 @@ while IFS= read -r app; do
   [[ -n "$formatted" ]] && formatted+=$'\n'
 
   if [[ -n "$ICON_PATH" ]]; then
-    formatted+="img:$ICON_PATH:text:$app"
-  else
-    formatted+="text:$app"
+    formatted+="img:$ICON_PATH:"
   fi
+  formatted+="text:$app"
 
 done <<< "$APPS"
 

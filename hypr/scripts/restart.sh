@@ -63,6 +63,32 @@ if ! command -v "$CMD" &>/dev/null; then
 fi
 
 # ======================================
+# CASO ESPECIAL: kitty
+# ======================================
+EXTRA_ARGS=()
+
+if [[ "$CMD" == "kitty" ]]; then
+
+  # buscar shell hijo (oh-my-zsh, o similares)
+  SHELL_PID=$(pgrep -P "$PID" -f 'zsh|bash|fish|sh' | head -n 1)
+
+  if [[ -n "$SHELL_PID" ]]; then
+    CWD=$(readlink -f "/proc/$SHELL_PID/cwd" 2>/dev/null)
+  else
+    CWD=$(readlink -f "/proc/$PID/cwd" 2>/dev/null)
+  fi
+
+  if [[ -n "$CWD" ]]; then
+    EXTRA_ARGS+=(--directory "$CWD")
+  fi
+
+  # preservar clase
+  if [[ -n "$CLASS" ]]; then
+    EXTRA_ARGS+=(--class "$CLASS")
+  fi
+fi
+
+# ======================================
 # Reinicio seguro
 # ======================================
 send_notification low "$APPLICATION" "$LOGO" "Reiniciando $CMD… · $(date +'%H:%M:%S')"
@@ -71,6 +97,6 @@ kill "$PID" 2>/dev/null
 sleep 0.4
 
 # Reiniciar con nohup, preservando rutas con espacios
-nohup "$CMD" >/dev/null 2>&1 & disown
+nohup "$CMD" "${EXTRA_ARGS[@]}">/dev/null 2>&1 & disown
 
 exit 0

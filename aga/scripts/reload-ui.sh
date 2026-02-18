@@ -8,11 +8,6 @@ require pgrep
 require waybar
 require swaync
 require hyprctl
-require hyprpaper
-
-BACKGROUND="/usr/share/sddm/themes/hypr-ely-neon/$(read_conf "Background")"
-
-echo -e "preload = $BACKGROUND\nwallpaper = ,$BACKGROUND" > "$HOME/.config/hypr/hyprpaper.conf"
 
 # =========================
 # Función: matar procesos si existen

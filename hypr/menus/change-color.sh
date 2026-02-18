@@ -54,6 +54,9 @@ set_theme() {
   color_rgb=$(to_rgb "$color")
   color_hex=$(to_hex "$color")
 
+  ln -sf "$THEME_DIR/kitty.conf" "$HOME/.config/kitty/colors.conf"
+  killall -SIGUSR1 kitty || true
+
   change-code-color "border" "$color_hex"
   change-code-color "foreground" "$color_hex"
   change-code-color "activeBorder" "$color_hex"
@@ -65,12 +68,6 @@ set_theme() {
   echo -e "general {\ncol.active_border = $color_rgb\n}" > "$HOME/.config/hypr/modules/ui/color.conf"
   "$HOME/.config/aga/scripts/reload-ui.sh" &
   swww img "$THEME_DIR/wallpaper" --transition-type outer --transition-duration 0.7
-
-  # ---------- Kitty colors (SIN socket) ----------
-  if [[ -f "$THEME_DIR/kitty.conf" ]]; then
-    ln -sf "$THEME_DIR/kitty.conf" "$HOME/.config/kitty/colors.conf"
-    killall -SIGUSR1 kitty || true
-  fi
 }
 
 # =========================
